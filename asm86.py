@@ -115,7 +115,7 @@ DATA_SEL equ 0x10"""
     
     os.system(f"nasm -f bin .boot{id_num}.asm -o .boot{id_num}.bin")
     os.system(f"nasm -f bin .kernel{id_num}.asm -o .kernel{id_num}.bin")
-    os.system(f"cat .boot{id_num}.bin .kernel{id_num}.bin > {name}.img")
+    os.system(f"cat .boot{id_num}.bin .kernel{id_num}.bin > {name}")
     
     os.remove(f".boot{id_num}.asm")
     os.remove(f".boot{id_num}.bin")
