@@ -2,6 +2,11 @@ import asm86
 import argparse
 import random
 
+data = {}
+packs = {}
+labels = []
+bools = []
+
 def draw_pixel(x, y, color):
     return f"""
     mov eax, esi
@@ -27,9 +32,7 @@ def kx86_compile(body, splitter = ";"):
     while "/:" and ":/" in body:
         body = body[:body.index("/:")] + body[body.index(":/") + 2:]
     final = ""
-    labels = []
-    bools = [
-    packs = {}
+    global data, packs, labels, bools
     body = body.split(splitter)
     for i in range(len(body)):
         cmd = body[i].strip()
@@ -81,45 +84,118 @@ def kx86_compile(body, splitter = ";"):
             case "//":
                 pass
 
-            case "int":
+            case "num":
                 cmd[1] = arguments(cmd[1].strip(), ",", 1)
-                final += "\n" + cmd[1][0].strip() + f":\ndd {cmd[1][1]}\n"
+                data["[" + cmd[1][0].strip() + "]"] = "num"
+                final += "\n" + cmd[1][0].strip() + f":\ndd {cmd[1][1].strip()}\n"
 
             case "edit":
-                cmd[1] = arguments(cmd[1].strip(), ",", 2)
-                if cmd[1][0].strip() == "int":
-                    final += f"\nmov dword [{cmd[1][1].strip()}], {cmd[1][2].strip()}\n"
+                cmd[1] = arguments(cmd[1].strip(), ",", 1)
+                final += f"\nmov dword {cmd[1][0].strip()}, {cmd[1][1].strip()}\n"
+                    
             case "if":
                 bool_num = random.randint(1,10000)
                 while bool_num in bools:
                     bool_num = random.randint(1,10000)
-                bool_num.append(bool_num)
+                bools.append(bool_num)
                 
-                cmd[1] = arguments(cmd[1].strip(), ",", 1)
+                
+                cmd[1] = arguments(cmd[1].strip(), ",", 2)
                 if ">=" in cmd[1][0]:
                     bool = cmd[1][0].strip()
                     bool = bool.split(">=")
-                    final += f"\nmov ax, {bool[0].strip()}\ncmp ax, {bool[1].strip()}\njge true{bool_num}\njl false{bool_num}\n"
+                    final += f"\nmov eax, {bool[0].strip()}\ncmp eax, {bool[1].strip()}\njge true{bool_num}\njl false{bool_num}\n"
                 elif "<=" in cmd[1][0]:
                     bool = cmd[1][0].strip()
                     bool = bool.split("<=")
-                    final += f"\nmov ax, {bool[0].strip()}\ncmp ax, {bool[1].strip()}\njle true{bool_num}\njg false{bool_num}\n"
+                    final += f"\nmov eax, {bool[0].strip()}\ncmp eax, {bool[1].strip()}\njle true{bool_num}\njg false{bool_num}\n"
                 elif "==" in cmd[1][0]:
                     bool = cmd[1][0].strip()
                     bool = bool.split("==")
-                    final += f"\nmov ax, {bool[0].strip()}\ncmp ax, {bool[1].strip()}\nje true{bool_num}\njne false{bool_num}\n"
+                    final += f"\nmov eax, {bool[0].strip()}\ncmp eax, {bool[1].strip()}\nje true{bool_num}\njne false{bool_num}\n"
                 elif "!=" in cmd[1][0]:
                     bool = cmd[1][0].strip()
                     bool = bool.split("!=")
-                    final += f"\nmov ax, {bool[0].strip()}\ncmp ax, {bool[1].strip()}\njne true{bool_num}\nje false{bool_num}\n"
-
-                final += f"\ntrue{bool_num}:\n\n"
-                final += "\n" + kx86_compile(packs[cmd[1][1].strip()], "&") + "\n"
-                final += f"\nfalse{bool_num}:\n\n"
-                if cmd[1][2].strip() != "NONE": # DO THIS AGAIN THE TRUE GOES INTO THE FALSE OH NO
-                    final += "\n" + kx86_compile(packs[cmd[1][2].strip()], "&") + "\n"
-                    
+                    final += f"\nmov eax, {bool[0].strip()}\ncmp eax, {bool[1].strip()}\njne true{bool_num}\nje false{bool_num}\n"
+                elif "<" in cmd[1][0]:
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("<")
+                    final += f"\nmov eax, {bool[0].strip()}\ncmp eax, {bool[1].strip()}\njl true{bool_num}\njge false{bool_num}\n"
+                elif ">" in cmd[1][0]:
+                    bool = cmd[1][0].strip()
+                    bool = bool.split(">")
+                    final += f"\nmov eax, {bool[0].strip()}\ncmp eax, {bool[1].strip()}\njg true{bool_num}\njle false{bool_num}\n"
                 
+                final += f"\ntrue{bool_num}:\n\n"
+                final += "\n" + kx86_compile(packs[cmd[1][1].strip()[5:]], "&") + "\n"
+                final += "\n" + f"jmp escape{bool_num}" + "\n"
+                final += f"\nfalse{bool_num}:\n\n"
+                if cmd[1][2].strip()[5:] != "NONE": # DO THIS AGAIN THE TRUE GOES INTO THE FALSE OH NO
+                    final += "\n" + kx86_compile(packs[cmd[1][2].strip()[5:]], "&") + "\n"
+                final += "\n" + f"escape{bool_num}:" + "\n"
+                    
+            case "while":
+                bool_num = random.randint(1,10000)
+                while bool_num in bools:
+                    bool_num = random.randint(1,10000)
+                bools.append(bool_num)
+                
+                cmd[1] = arguments(cmd[1].strip(), ",", 1)
+                final += f"\nwhile{bool_num}:\n"
+                if ">=" in cmd[1][0]:
+                    bool = cmd[1][0].strip()
+                    bool = bool.split(">=")
+                    final += f"\nmov eax, {bool[0].strip()}\ncmp eax, {bool[1].strip()}\njge true{bool_num}\njl false{bool_num}\n"
+                elif "<=" in cmd[1][0]:
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("<=")
+                    final += f"\nmov eax, {bool[0].strip()}\ncmp eax, {bool[1].strip()}\njle true{bool_num}\njg false{bool_num}\n"
+                elif "==" in cmd[1][0]:
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("==")
+                    final += f"\nmov eax, {bool[0].strip()}\ncmp eax, {bool[1].strip()}\nje true{bool_num}\njne false{bool_num}\n"
+                elif "!=" in cmd[1][0]:
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("!=")
+                    final += f"\nmov eax, {bool[0].strip()}\ncmp eax, {bool[1].strip()}\njne true{bool_num}\nje false{bool_num}\n"
+                elif "<" in cmd[1][0]:
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("<")
+                    final += f"\nmov eax, {bool[0].strip()}\ncmp eax, {bool[1].strip()}\njl true{bool_num}\njge false{bool_num}\n"
+                elif ">" in cmd[1][0]:
+                    bool = cmd[1][0].strip()
+                    bool = bool.split(">")
+                    final += f"\nmov eax, {bool[0].strip()}\ncmp eax, {bool[1].strip()}\njg true{bool_num}\njle false{bool_num}\n"
+                
+                final += f"\ntrue{bool_num}:\n\n"
+                final += "\n" + kx86_compile(packs[cmd[1][1].strip()[5:]], "&") + "\n"
+                final += "\n" + f"jmp while{bool_num}" + "\n"
+                final += f"\nfalse{bool_num}:\n\n"
+            case "op":
+                cmd[1] = arguments(cmd[1].strip(), ",", 1)
+                
+                if "+" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("+")
+                    final += f"\nmov eax, {bool[0].strip()}\nadd eax, {bool[1].strip()}\nmov dword {cmd[1][1]}, eax"
+                if "-" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("-")
+                    final += f"\nmov eax, {bool[0].strip()}\nsub eax, {bool[1].strip()}\nmov dword {cmd[1][1]}, eax"
+                if "*" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("*")
+                    final += f"\nmov eax, {bool[0].strip()}\nimul eax, {bool[1].strip()}\nmov dword {cmd[1][1]}, eax"
+                if "/" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("/")
+                    final += f"\nmov eax, {bool[0].strip()}\nidiv eax, {bool[1].strip()}\nmov dword {cmd[1][1]}, eax"
+                
+            case "array":
+                cmd[1] = arguments(cmd[1].strip(), ",", 1)
+                data["[" + cmd[1][0].strip() + "]"] = "array"
+                final += "\n" + cmd[1][0].strip() + f":\ndd {cmd[1][1].strip()}\n"
+
             
 
     return final
@@ -136,5 +212,5 @@ if __name__ == "__main__":
         with open(args.file[i], "r") as f:
             body += "\n" + f.read()
 
-    asm86.kernel += kx86_compile(body)
+    asm86.kernel += kx86_compile(body).replace("@", " + ")
     asm86.create_image(args.output)
