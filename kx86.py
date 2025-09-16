@@ -24,6 +24,8 @@ def arguments(cmd, splitter, amount):
     return cmd.split(str(replacement))
 
 def kx86_compile(body, splitter = ";"):
+    while "/:" and ":/" in body:
+        body = body[:body.index("/:")] + body[body.index(":/") + 2:]
     final = ""
     labels = []
     packs = {}
@@ -44,13 +46,17 @@ def kx86_compile(body, splitter = ";"):
 
             case "call":
                 params = 1
-                func = packs[cmd[1][:cmd[1].index(",")].strip()]
-                while f"${params}" in func:
-                    params += 1
-                cmd[1] = arguments(cmd[1].strip(), ",", params)
-                for g in range(1, params):
-                    func = func.replace(f"${g}", cmd[1][g])
-                final += kx86_compile(func, "&") + "\n"
+                try:
+                    func = packs[cmd[1][:cmd[1].index(",")].strip()]
+                    while f"${params}" in func:
+                        params += 1
+                    cmd[1] = arguments(cmd[1].strip(), ",", params)
+                    for g in range(1, params):
+                        func = func.replace(f"${g}", cmd[1][g])
+                    final += kx86_compile(func, "&") + "\n"
+                except:
+                    final += kx86_compile(packs[cmd[1].strip()], "&") + "\n"
+
 
             case "forever":
                 label = random.randint(1,10000)
@@ -59,14 +65,20 @@ def kx86_compile(body, splitter = ";"):
                 labels.append(label)
 
                 params = 1
-                func = packs[cmd[1][:cmd[1].index(",")].strip()]
-                while f"${params}" in func:
-                    params += 1
-                cmd[1] = arguments(cmd[1].strip(), ",", params)
-                for g in range(1, params):
-                    func = func.replace(f"${g}", cmd[1][g])
+                try:
+                    func = packs[cmd[1][:cmd[1].index(",")].strip()]
+                    while f"${params}" in func:
+                        params += 1
+                    cmd[1] = arguments(cmd[1].strip(), ",", params)
+                    for g in range(1, params):
+                        func = func.replace(f"${g}", cmd[1][g])
 
-                final += f"\nj{label}:\n" + kx86_compile(func, "&") + f"\njmp j{label}\n"
+                    final += f"\nj{label}:\n" + kx86_compile(func, "&") + f"\njmp j{label}\n"
+                except:
+                    final += f"\nj{label}:\n" + kx86_compile(packs[cmd[1].strip()], "&") + f"\njmp j{label}\n"
+
+            case "//":
+                pass
             
 
     return final
