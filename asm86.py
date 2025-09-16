@@ -43,7 +43,6 @@ start:
     mov bx, 0x118 | 0x4000
     int 0x10
 
-    ; Get Mode Info (0x4F01)
     mov ax, 0x4F01
     mov cx, 0x118
     mov di, mode_info
@@ -82,7 +81,6 @@ def create_image(name):
 align 4
 lfb_addr: dd 0
 
-; VBE Mode Info block (256 bytes)
 mode_info: times 256 db 0
 
 align 8
