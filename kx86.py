@@ -16,6 +16,7 @@ def draw_pixel(x, y, color):
 
 def kx86_compile(body, splitter = ";"):
     final = ""
+    labels = []
     packs = {}
     body = body.split(splitter)
     for i in range(len(body)):
@@ -24,7 +25,7 @@ def kx86_compile(body, splitter = ";"):
             continue
         cmd = [cmd[:cmd.index(":")].strip(), cmd[cmd.index(":") + 1:].strip()]
         match cmd[0].strip():
-            case "draw_pixel":
+            case "pixel":
                 cmd[1] = [cmd[1][:cmd[1].index(",")].strip(), cmd[1][cmd[1].index(",") + 1:].strip()]
                 cmd[1] = [cmd[1][0], cmd[1][1][:cmd[1][1].index(",")].strip(), cmd[1][1][cmd[1][1].index(",") + 1:].strip()]
                 final += draw_pixel(cmd[1][0], cmd[1][1], cmd[1][2])
@@ -35,6 +36,13 @@ def kx86_compile(body, splitter = ";"):
 
             case "call":
                 final += kx86_compile(packs[cmd[1]], "&")
+
+            case "forever":
+                label = random.randint(1,10000)
+                while label in labels:
+                    label = random.randint(1,10000)
+                labels.append(label)
+                final += f"j{label}:\n" + kx86_compile(packs[cmd[1]], "&") + f"\njmp j{label}"
                 
 
     return final
