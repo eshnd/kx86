@@ -28,6 +28,7 @@ def kx86_compile(body, splitter = ";"):
         body = body[:body.index("/:")] + body[body.index(":/") + 2:]
     final = ""
     labels = []
+    bools = [
     packs = {}
     body = body.split(splitter)
     for i in range(len(body)):
@@ -88,12 +89,36 @@ def kx86_compile(body, splitter = ";"):
                 cmd[1] = arguments(cmd[1].strip(), ",", 2)
                 if cmd[1][0].strip() == "int":
                     final += f"\nmov dword [{cmd[1][1].strip()}], {cmd[1][2].strip()}\n"
-            # case "bool":
-            #     cmd[1] = arguments(cmd[1].strip(), ",", 1)
-            #     if ">=" in cmd[1][1]:
-            #         bool = cmd[1][1].strip()
-            #         bool = bool.split(">=")
-            #         final += f"\nmov ax, {bool[0]}\ncmp ax, {bool[1]}\n"
+            case "if":
+                bool_num = random.randint(1,10000)
+                while bool_num in bools:
+                    bool_num = random.randint(1,10000)
+                bool_num.append(bool_num)
+                
+                cmd[1] = arguments(cmd[1].strip(), ",", 1)
+                if ">=" in cmd[1][0]:
+                    bool = cmd[1][0].strip()
+                    bool = bool.split(">=")
+                    final += f"\nmov ax, {bool[0].strip()}\ncmp ax, {bool[1].strip()}\njge true{bool_num}\njl false{bool_num}\n"
+                elif "<=" in cmd[1][0]:
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("<=")
+                    final += f"\nmov ax, {bool[0].strip()}\ncmp ax, {bool[1].strip()}\njle true{bool_num}\njg false{bool_num}\n"
+                elif "==" in cmd[1][0]:
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("==")
+                    final += f"\nmov ax, {bool[0].strip()}\ncmp ax, {bool[1].strip()}\nje true{bool_num}\njne false{bool_num}\n"
+                elif "!=" in cmd[1][0]:
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("!=")
+                    final += f"\nmov ax, {bool[0].strip()}\ncmp ax, {bool[1].strip()}\njne true{bool_num}\nje false{bool_num}\n"
+
+                final += f"\ntrue{bool_num}:\n\n"
+                final += "\n" + kx86_compile(packs[cmd[1][1].strip()], "&") + "\n"
+                final += f"\nfalse{bool_num}:\n\n"
+                if cmd[1][2].strip() != "NONE": # DO THIS AGAIN THE TRUE GOES INTO THE FALSE OH NO
+                    final += "\n" + kx86_compile(packs[cmd[1][2].strip()], "&") + "\n"
+                    
                 
             
 
