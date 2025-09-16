@@ -1,5 +1,6 @@
 import asm86
 import argparse
+import random
 
 def draw_pixel(x, y, color):
     return f"""
