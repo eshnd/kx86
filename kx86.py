@@ -13,7 +13,8 @@ def draw_pixel(x, y, color):
     add ecx, ebx
     imul ecx, 3
     add edi, ecx
-    mov dword [edi], 0x{color[1:]}"""
+    mov dword [edi], 0x{color[1:]}
+"""
 
 def arguments(cmd, splitter, amount):
     replacement = random.randint(1, 10000)
@@ -42,14 +43,30 @@ def kx86_compile(body, splitter = ";"):
                 packs[cmd[1][0].strip()] = cmd[1][1].strip()
 
             case "call":
-                final += kx86_compile(packs[cmd[1].strip()], "&")
+                params = 1
+                func = packs[cmd[1][:cmd[1].index(",")].strip()]
+                while f"${params}" in func:
+                    params += 1
+                cmd[1] = arguments(cmd[1].strip(), ",", params)
+                for g in range(1, params):
+                    func = func.replace(f"${g}", cmd[1][g])
+                final += kx86_compile(func, "&") + "\n"
 
             case "forever":
                 label = random.randint(1,10000)
                 while label in labels:
                     label = random.randint(1,10000)
                 labels.append(label)
-                final += f"j{label}:\n" + kx86_compile(packs[cmd[1].strip()], "&") + f"\njmp j{label}"
+
+                params = 1
+                func = packs[cmd[1][:cmd[1].index(",")].strip()]
+                while f"${params}" in func:
+                    params += 1
+                cmd[1] = arguments(cmd[1].strip(), ",", params)
+                for g in range(1, params):
+                    func = func.replace(f"${g}", cmd[1][g])
+
+                final += f"\nj{label}:\n" + kx86_compile(func, "&") + f"\njmp j{label}\n"
             
 
     return final
