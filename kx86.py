@@ -79,6 +79,11 @@ def kx86_compile(body, splitter = ";"):
 
             case "//":
                 pass
+
+            case "int":
+                cmd[1] = arguments(cmd[1].strip(), ",", 1)
+                final += "\n" + cmd[1][0].strip() + f":\ndd {cmd[1][1]}\n"
+                
             
 
     return final
