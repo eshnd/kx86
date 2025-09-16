@@ -1,6 +1,5 @@
 import asm86
 import argparse
-import re
 
 def draw_pixel(x, y, color):
     return f"""
@@ -15,18 +14,30 @@ def draw_pixel(x, y, color):
     add edi, ecx
     mov dword [edi], 0x{color[1:]}"""
 
-def kx86_compile(body):
+def kx86_compile(body, splitter = ";"):
     final = ""
-    body = body.split(";")
+    packs = {}
+    body = body.split(splitter)
     for i in range(len(body)):
         cmd = body[i].strip()
-        cmd = re.split(r'[()]+', cmd) # can replace with for c in s if need escapes
+        if cmd.strip() == "":
+            continue
+        cmd = [cmd[:cmd.index(":")].strip(), cmd[cmd.index(":") + 1:].strip()]
         match cmd[0].strip():
             case "draw_pixel":
-                cmd[1] = cmd[1].split(",")
-                for j in range(len(cmd[1])):
-                    cmd[1][j] = cmd[1][j].strip()
+                cmd[1] = [cmd[1][:cmd[1].index(",")].strip(), cmd[1][cmd[1].index(",") + 1:].strip()]
+                cmd[1] = [cmd[1][0], cmd[1][1][:cmd[1][1].index(",")].strip(), cmd[1][1][cmd[1][1].index(",") + 1:].strip()]
                 final += draw_pixel(cmd[1][0], cmd[1][1], cmd[1][2])
+            
+            case "pack":
+                cmd[1] = [cmd[1][:cmd[1].index(",")].strip(), cmd[1][cmd[1].index(",") + 1:].strip()]
+                packs[cmd[1][0]] = cmd[1][1]
+                print(packs)
+
+            case "call":
+                final += kx86_compile(packs[cmd[1]], "&")
+                
+
     return final
     
 

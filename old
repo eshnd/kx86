@@ -1,0 +1,5 @@
+pack: function,
+draw_pixel: 76, 51, #001BFF &
+draw_pixel: 76, 55, #E70000 &;
+
+call: function;
