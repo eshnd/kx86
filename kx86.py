@@ -32,7 +32,6 @@ def kx86_compile(body, splitter = ";"):
             case "pack":
                 cmd[1] = [cmd[1][:cmd[1].index(",")].strip(), cmd[1][cmd[1].index(",") + 1:].strip()]
                 packs[cmd[1][0]] = cmd[1][1]
-                print(packs)
 
             case "call":
                 final += kx86_compile(packs[cmd[1]], "&")
