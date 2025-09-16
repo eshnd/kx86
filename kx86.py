@@ -83,6 +83,16 @@ def kx86_compile(body, splitter = ";"):
             case "int":
                 cmd[1] = arguments(cmd[1].strip(), ",", 1)
                 final += "\n" + cmd[1][0].strip() + f":\ndd {cmd[1][1]}\n"
+
+            case "edit":
+                cmd[1] = arguments(cmd[1].strip(), ",", 1)
+                final += f"\nmov dword [{cmd[1][0]}], {cmd[1][1]\n}"
+            # case "bool":
+            #     cmd[1] = arguments(cmd[1].strip(), ",", 1)
+            #     if ">=" in cmd[1][1]:
+            #         bool = cmd[1][1].strip()
+            #         bool = bool.split(">=")
+            #         final += f"\nmov ax, {bool[0]}\ncmp ax, {bool[1]}\n"
                 
             
 
