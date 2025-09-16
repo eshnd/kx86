@@ -102,7 +102,7 @@ DATA_SEL equ 0x10"""
     attempts = 0
     while os.path.exists(f".boot{id_num}.asm") or os.path.exists(f".boot{id_num}.bin") or os.path.exists(f".kernel{id_num}.asm") or os.path.exists(f".kernel{id_num}.bin"):
         if attempts > 1000:
-            print(f"Please don't have lots of files with similar names to '.boot{id_num}.asm'/'.boot{id_num}.bin'/'.kernel{id_num}.asm'/'.boot{id_num}.bin'")
+            print(f"please don't have lots of files with similar names to '.boot{id_num}.asm'/'.boot{id_num}.bin'/'.kernel{id_num}.asm'/'.boot{id_num}.bin'")
             sys.exit()
         id_num = random.randint(1000,10000)
         attempts += 1
