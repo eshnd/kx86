@@ -1,9 +1,9 @@
 import asm86
 import argparse
+import re
 
-def draw_pixel(x, y):
-    global asm86
-    asm86.kernel += f"""
+def draw_pixel(x, y, color):
+    return f"""
     mov eax, esi
     mov ebx, {x}
     mov ecx, {y}
@@ -13,17 +13,21 @@ def draw_pixel(x, y):
     add ecx, ebx
     imul ecx, 3
     add edi, ecx
-    mov dword [edi], 0x00FF0000"""
+    mov dword [edi], 0x{color[1:]}"""
 
 def kx86_compile(body):
+    final = ""
     body = body.split(";")
     for i in range(len(body)):
         cmd = body[i].strip()
-        cmd.split("(") # can replace with for c in s if need escapes
-        cmd.split(")")
+        cmd = re.split(r'[()]+', cmd) # can replace with for c in s if need escapes
         match cmd[0].strip():
             case "draw_pixel":
-                draw_pixel(cmd[1].strip(), cmd[2].strip())
+                cmd[1] = cmd[1].split(",")
+                for j in range(len(cmd[1])):
+                    cmd[1][j] = cmd[1][j].strip()
+                final += draw_pixel(cmd[1][0], cmd[1][1], cmd[1][2])
+    return final
     
 
 parser = argparse.ArgumentParser()
@@ -37,5 +41,5 @@ for i in range(len(args.file)):
     with open(args.file[i], "r") as f:
         body += "\n" + f.read()
 
-body = kx86_compile(body)
+asm86.kernel += kx86_compile(body)
 asm86.create_image(args.output)
