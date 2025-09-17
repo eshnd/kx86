@@ -13,7 +13,6 @@ while: [i_i] <= 50,
 mouse: update;
 :/
 
-
 /: features to add: get keys:/
 /:key command will check what key is pressed and will store it in given var:/
 /:time counter and sleeper:/
