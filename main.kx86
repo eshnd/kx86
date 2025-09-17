@@ -21,4 +21,5 @@ forever: looper;
 /:key command will check what key is pressed and will store it in given var:/
 /:time counter and sleeper:/
 /:write docs OR YOU WILL FORGET:/
+/:compiler argument to keep kernel assembly file:/
 /:make variables have underscores so it doesnt interfere with assembly variables!:/
