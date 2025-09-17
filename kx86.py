@@ -196,7 +196,22 @@ def kx86_compile(body, splitter = ";"):
                 data["[" + cmd[1][0].strip() + "]"] = "array"
                 final += "\n" + cmd[1][0].strip() + f":\ndd {cmd[1][1].strip()}\n"
 
-            
+            case "cast":
+                cmd[1] = arguments(cmd[1].strip(), ",", 1)
+                if cmd[1][0].strip() == "float":
+                    final += f"""
+{cmd[1][1].strip()[1:-1]}_f:
+dd 0
+fild dword {cmd[1][1].strip()}
+fstp dword [{cmd[1][1].strip()[1:-1]}_f]
+"""
+                elif cmd[1][0].strip() == "int":
+                    final += f"""
+{cmd[1][1].strip()[1:-1]}_i:
+dd 0
+fld dword {cmd[1][1].strip()}
+fistp dword [{cmd[1][1].strip()[1:-1]}_i]
+"""
 
     return final
     
