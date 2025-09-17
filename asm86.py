@@ -117,5 +117,5 @@ DATA_SEL equ 0x10"""
     
     os.remove(f".boot{id_num}.asm")
     os.remove(f".boot{id_num}.bin")
-    os.remove(f".kernel{id_num}.asm")
+    # os.remove(f".kernel{id_num}.asm")
     os.remove(f".kernel{id_num}.bin")

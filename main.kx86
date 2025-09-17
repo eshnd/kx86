@@ -1,4 +1,4 @@
-num: i, 1.234;
+/:num: i, 1.234;
 cast: int, [i];
 
 pack: line,
@@ -8,6 +8,14 @@ pack: line,
 
 while: [i_i] <= 50,
     then=line;
+:/
+/:
+mouse: update;
+:/
 
-/: features to add: get keys, get mouse,
- cast float to int and into to float:/
+
+/: features to add: get keys, get mouse:/
+/:mouse command will check what mouse button is pressed and will store it in given var array along with x and y global vars:/
+/:key command will check what key is pressed and will store it in given var:/
+/:time counter and sleeper:/
+/:write docs OR YOU WILL FORGET:/

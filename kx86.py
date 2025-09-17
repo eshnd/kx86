@@ -6,6 +6,7 @@ data = {}
 packs = {}
 labels = []
 bools = []
+mice = []
 
 def draw_pixel(x, y, color):
     return f"""
@@ -213,6 +214,20 @@ fld dword {cmd[1][1].strip()}
 fistp dword [{cmd[1][1].strip()[1:-1]}_i]
 """
 
+            case "mouse":
+                mice_n = random.randint(1,10000)
+                while mice_n in mice:
+                    mice_n = random.randint(1,10000)
+                mice.append(mice_n)
+                final += f"""
+"""
+            case "key":
+                mice_n = random.randint(1,10000)
+                while mice_n in mice:
+                    mice_n = random.randint(1,10000)
+                mice.append(mice_n)
+                final += f"""
+"""
     return final
     
 if __name__ == "__main__":
