@@ -231,12 +231,13 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     body = ""
-
+    temp = "*"
     for i in range(len(args.file)):
         with open(args.file[i], "r") as f:
             body += "\n" + f.read()
     if args.show_asm:
-        asm86.kernel += kx86_compile(body, args.show_asm.strip()).replace("@", " + ").replace("{", "").replace("}", "")
+        asm86.kernel += kx86_compile(body).replace("@", " + ").replace("{", "").replace("}", "")
+        temp = "a"
     else:
         asm86.kernel += kx86_compile(body).replace("@", " + ").replace("{", "").replace("}", "")
-    asm86.create_image(args.output)
+    asm86.create_image(args.output, temp)
