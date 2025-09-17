@@ -14,8 +14,7 @@ mouse: update;
 :/
 
 
-/: features to add: get keys, get mouse:/
-/:mouse command will check what mouse button is pressed and will store it in given var array along with x and y global vars:/
+/: features to add: get keys:/
 /:key command will check what key is pressed and will store it in given var:/
 /:time counter and sleeper:/
 /:write docs OR YOU WILL FORGET:/

@@ -126,7 +126,13 @@ def kx86_compile(body, splitter = ";"):
                     bool = cmd[1][0].strip()
                     bool = bool.split(">")
                     final += f"\nmov eax, {bool[0].strip()}\ncmp eax, {bool[1].strip()}\njg true{bool_num}\njle false{bool_num}\n"
-                
+                else:
+                    bool = cmd[1][0].strip() # this is the key that you're checking is pressed
+                    final += f"""
+
+"""
+
+
                 final += f"\ntrue{bool_num}:\n\n"
                 final += "\n" + kx86_compile(packs[cmd[1][1].strip()[5:]], "&") + "\n"
                 final += "\n" + f"jmp escape{bool_num}" + "\n"
@@ -214,20 +220,6 @@ fld dword {cmd[1][1].strip()}
 fistp dword [{cmd[1][1].strip()[1:-1]}_i]
 """
 
-            case "mouse":
-                mice_n = random.randint(1,10000)
-                while mice_n in mice:
-                    mice_n = random.randint(1,10000)
-                mice.append(mice_n)
-                final += f"""
-"""
-            case "key":
-                mice_n = random.randint(1,10000)
-                while mice_n in mice:
-                    mice_n = random.randint(1,10000)
-                mice.append(mice_n)
-                final += f"""
-"""
     return final
     
 if __name__ == "__main__":

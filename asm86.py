@@ -75,9 +75,8 @@ pm_start:
 def create_image(name):
     global kernel
     kernel += """
-.hang:
-    hlt
-    jmp .hang
+hang:
+jmp hang
 align 4
 lfb_addr: dd 0
 
@@ -117,5 +116,5 @@ DATA_SEL equ 0x10"""
     
     os.remove(f".boot{id_num}.asm")
     os.remove(f".boot{id_num}.bin")
-    # os.remove(f".kernel{id_num}.asm")
+    os.remove(f".kernel{id_num}.asm")
     os.remove(f".kernel{id_num}.bin")
