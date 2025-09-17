@@ -227,13 +227,16 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--file", type=str, nargs="+", help="file or files to compile")
     parser.add_argument("-o", "--output", type=str, help="file to output to")
-
+    parser.add_argument("-s", "--show-asm", type=str, help="display resultant assembly")
+    
     args = parser.parse_args()
     body = ""
 
     for i in range(len(args.file)):
         with open(args.file[i], "r") as f:
             body += "\n" + f.read()
-
-    asm86.kernel += kx86_compile(body).replace("@", " + ").replace("{", "").replace("}", "")
+    if args.show_asm:
+        asm86.kernel += kx86_compile(body, args.show_asm.strip()[0]).replace("@", " + ").replace("{", "").replace("}", "")
+    else:
+        asm86.kernel += kx86_compile(body).replace("@", " + ").replace("{", "").replace("}", "")
     asm86.create_image(args.output)
