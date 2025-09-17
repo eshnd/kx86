@@ -1,4 +1,4 @@
-/:num: i, 1.234;
+num: i, {1.234, 7, 8};
 cast: int, [i];
 
 pack: line,
@@ -8,12 +8,16 @@ pack: line,
 
 while: [i_i] <= 50,
     then=line;
-:/
-/:
-mouse: update;
-:/
 
-/: features to add: get keys:/
+pack: looper,
+    op: [i_i] + 1, [i_i] &
+    op: [i_i] + 1, [i_i] &
+;
+
+forever: looper;
+
+
+/: features to add: get keys and mouse:/
 /:key command will check what key is pressed and will store it in given var:/
 /:time counter and sleeper:/
 /:write docs OR YOU WILL FORGET:/

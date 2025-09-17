@@ -234,5 +234,5 @@ if __name__ == "__main__":
         with open(args.file[i], "r") as f:
             body += "\n" + f.read()
 
-    asm86.kernel += kx86_compile(body).replace("@", " + ")
+    asm86.kernel += kx86_compile(body).replace("@", " + ").replace("{", "").replace("}", "")
     asm86.create_image(args.output)
