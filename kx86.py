@@ -1,3 +1,4 @@
+#!/bin/python3
 import asm86
 import argparse
 import random
