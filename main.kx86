@@ -24,3 +24,4 @@ forever: looper;
 /:write docs OR YOU WILL FORGET:/
 /:compiler argument to keep kernel assembly file:/
 /:make variables have underscores so it doesnt interfere with assembly variables!:/
+/: make it so that casting a variable makes you put the cast into another variable (make it an operation):/
