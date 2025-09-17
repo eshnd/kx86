@@ -111,7 +111,7 @@ pm_start:
 
 """
 
-def create_image(name, show="f"):
+def create_image(name, show="*"):
     global kernel
     kernel += """
 
@@ -157,8 +157,8 @@ DATA_SEL equ 0x10"""
     
     os.remove(f".boot{id_num}.asm")
     os.remove(f".boot{id_num}.bin")
-    if show == "f":
+    if show == "*":
         os.remove(f".kernel{id_num}.asm")
     else:
-        os.system(f"mv .kernel{id_num}.asm kernel{id_num}.asm")
+        os.system(f"mv .kernel{id_num}.asm {show}")
     os.remove(f".kernel{id_num}.bin")
