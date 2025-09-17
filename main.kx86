@@ -1,17 +1,5 @@
-num: i, {1.234, 7, 8};
-cast: int, [i];
-
-pack: line,
-    pixel: [i_i], 76, #FF0000 &
-    op: [i_i] + 1, [i_i] &
-;
-
-while: [i_i] <= 50,
-    then=line;
-
 pack: looper,
-    op: [i_i] + 1, [i_i] &
-    op: [i_i] + 1, [i_i] &
+    pixel: [mouse_x], [mouse_y], #FF0000 &
 ;
 
 forever: looper;

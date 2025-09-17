@@ -238,3 +238,5 @@ if __name__ == "__main__":
     asm86.kernel += kx86_compile(body).replace("@", " + ").replace("{", "").replace("}", "")
     if args.show_asm:
         asm86.create_image(args.output, args.show_asm.strip())
+    else:
+        asm86.create_image(args.output)

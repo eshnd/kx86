@@ -108,6 +108,107 @@ pm_start:
     mov esp, 0x90000
 
     mov esi, [lfb_addr]
+; mouse.asm
+[BITS 32]
+
+section .bss
+mouse_x: resd 1
+mouse_y: resd 1
+mouse_buttons: resb 1
+
+section .data
+; Mouse packet buffer
+mouse_packet: times 3 db 0
+mouse_cycle: db 0
+
+section .text
+global mouse_init
+extern irq12_handler_end
+
+; -----------------------
+; Write byte to PS/2 controller
+; -----------------------
+write_mouse:
+    push eax
+.wait:
+    in al, 0x64        ; read status
+    test al, 2
+    jnz .wait
+    pop eax
+    out 0x60, al
+    ret
+
+; -----------------------
+; Mouse IRQ handler
+; -----------------------
+mouse_irq_handler:
+    pusha
+
+    in al, 0x60            ; read byte from mouse
+    mov bl, [mouse_cycle]
+
+    cmp bl, 0
+    je .first_byte
+    cmp bl, 1
+    je .second_byte
+    cmp bl, 2
+    je .third_byte
+
+.first_byte:
+    mov [mouse_packet], al
+    inc byte [mouse_cycle]
+    jmp .done
+
+.second_byte:
+    mov [mouse_packet+1], al
+    inc byte [mouse_cycle]
+    jmp .done
+
+.third_byte:
+    mov [mouse_packet+2], al
+    xor byte [mouse_cycle], 0       ; reset to 0
+
+    ; update mouse_x and mouse_y
+    movsx eax, byte [mouse_packet+1]
+    add dword [mouse_x], eax
+
+    movsx eax, byte [mouse_packet+2]
+    add dword [mouse_y], eax
+
+    ; store buttons
+    mov al, [mouse_packet]
+    and al, 7                  ; left, right, middle
+    mov [mouse_buttons], al
+
+.done:
+    ; send EOI to PIC
+    mov al, 0x20
+    out 0xA0, al     ; slave
+    out 0x20, al     ; master
+
+    popa
+    iretd
+
+; -----------------------
+; Initialize mouse
+; -----------------------
+mouse_init:
+    ; Enable IRQ12 on PIC (unmask)
+    in al, 0xA1
+    and al, 0xEF      ; clear bit 4 (IRQ12)
+    out 0xA1, al
+
+    ; Enable mouse device
+    mov al, 0xA8
+    out 0x64, al
+
+    ; Tell mouse to use default settings
+    mov al, 0xD4
+    out 0x64, al
+    mov al, 0xF4
+    out 0x60, al
+
+    ret
 
 """
 
