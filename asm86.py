@@ -148,7 +148,8 @@ DATA_SEL equ 0x10"""
 
     with open(f".kernel{id_num}.asm", "w") as f:
         f.write(kernel)
-    
+    if show != "*":
+        os.system(f"cp .kernel{id_num}.asm {show}")
     os.system(f"nasm -f bin .boot{id_num}.asm -o .boot{id_num}.bin")
     os.system(f"nasm -f bin .kernel{id_num}.asm -o .kernel{id_num}.bin")
     os.system(f"dd if=/dev/zero of={name} bs=512 count=200")
@@ -157,8 +158,5 @@ DATA_SEL equ 0x10"""
     
     os.remove(f".boot{id_num}.asm")
     os.remove(f".boot{id_num}.bin")
-    if show == "*":
-        os.remove(f".kernel{id_num}.asm")
-    else:
-        os.system(f"mv .kernel{id_num}.asm {show}")
+    os.remove(f".kernel{id_num}.asm")
     os.remove(f".kernel{id_num}.bin")
