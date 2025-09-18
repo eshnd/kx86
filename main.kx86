@@ -18,4 +18,4 @@ forever: func;
 /:fix pixels:/
 /:time counter and sleeper:/
 /:write docs OR YOU WILL FORGET:/
-/:network stack:/
+/:network stack (should be able to send and recieve bytes similar to UDP):/
