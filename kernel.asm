@@ -55,55 +55,46 @@ dd 0
 y:
 dd 0
 
-j8506:
+j8195:
 
-CheckKeyboard5345:
+CheckKeyboard8664:
     in al, 0x64
     test al, 1
-    jz Done5345
+    jz Done8664
     in al, 0x60
     cmp al, 0x80
-    jb Pressed5345
+    jb Pressed8664
     sub al, 0x80
     mov byte [KEYS+eax], 0
-    jmp Done5345
+    jmp Done8664
 
-Pressed5345:
+Pressed8664:
     mov byte [KEYS+eax], 1
 
-Done5345:
+Done8664:
     cmp byte [KEYS+0x1E], 1
-    jne false5345
+    jne false8664
     sub byte [KEYS+0x1E], 1
-    jmp true5345
+    jmp true8664
 
 
-true5345:
+true8664:
 
 
 
-; inputs: esi = lfb base
-;         x = 100
-;         y = 100
-;         color = red (0xFF0000)
 
-mov edi, esi          ; edi = lfb base
+mov edi, esi       
+mov ecx, [y]    
+mov dx, [lfb_pitch] 
+movzx edx, dx      
+imul ecx, edx   
 
-; compute y * pitch
-mov ecx, [y]          ; y
-mov dx, [lfb_pitch]   ; pitch
-movzx edx, dx         ; edx = pitch (32-bit)
-imul ecx, edx         ; ecx = y * pitch
+mov eax, [x]        
+imul eax, 3         
 
-; compute x * 3 (3 bytes per pixel)
-mov eax, [x]          ; x
-imul eax, 3           ; eax = x * 3
-
-; total offset
 add ecx, eax
-add edi, ecx          ; edi = pixel address
+add edi, ecx        
 
-; write pixel (B G R)
 mov dword [edi], 0xFF0000
 
 
@@ -114,14 +105,14 @@ mov eax, [y]
 add eax, 1
 mov dword [y], eax
 
-jmp escape5345
+jmp escape8664
 
-false5345:
+false8664:
 
 
-escape5345:
+escape8664:
 
-jmp j8506
+jmp j8195
 
 
 
