@@ -15,9 +15,11 @@ pack: func,
 
 forever: func;
 
-/:fix pixels:/
-/:time counter and sleeper:/
-/:add image rendering (image should be added in the compiler):/
-/:add letter printing:/
-/:network stack (should be able to send and recieve bytes similar to UDP):/
-/:write docs OR YOU WILL FORGET:/
+/:
+- fix pixels
+- time counter and sleeper
+- add image rendering (image should be added in the compiler)
+- add letter printing
+- network stack (should be able to send and recieve bytes similar to UDP)
+- write docs OR YOU WILL FORGET
+:/
