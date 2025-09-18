@@ -1,15 +1,26 @@
 num: x, 0;
+num: one_constant, 1.0;
+num: x_f, 0.0;
 num: y, 0;
 
 pack: draw,
     pixel: [x], [y], #FF0000 &
+    op: [one_constant] +++ 1.0, [one_constant] &
+;
+
+pack: check,
+    op: [x] >f, [x_f] &
+    op: [x_f] /// 10.0, [x_f] &
+    if: [x_f] == [one_constant], 
+        then=draw,
+        else=NONE &
     op: [x] ++ 1, [x] &
     op: [y] ++ 1, [y] &
 ;
 
 pack: func,
     if: key=a,
-        then=draw,
+        then=check,
         else=NONE &
 ;
 
@@ -17,6 +28,7 @@ forever: func;
 
 /:
 - fix pixels
+- float constant comparisons
 - time counter and sleeper
 - add image rendering (image should be added in the compiler)
 - network stack (should be able to send and recieve bytes similar to UDP)

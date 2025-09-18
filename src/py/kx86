@@ -66,6 +66,7 @@ letterdict = {
 def draw_pixel(x, y, color):
     return f"""
 
+
 mov edi, esi       
 mov ecx, {y}    
 mov dx, [lfb_pitch] 
@@ -79,6 +80,7 @@ add ecx, eax
 add edi, ecx        
 
 mov dword [edi], 0x{color[1:]}
+
 
 """
 

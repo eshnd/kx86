@@ -78,11 +78,11 @@ start:
     mov sp, 0x7C00
 
     mov ax, 0x4F02
-    mov bx, 0x11F | 0x4000
+    mov bx, 0x118 | 0x4000
     int 0x10
 
     mov ax, 0x4F01
-    mov cx, 0x11F
+    mov cx, 0x118
     mov di, mode_info
     int 0x10
     
@@ -91,8 +91,8 @@ start:
     mov eax, [mode_info + 0x28]
     mov [lfb_addr], eax
 
-    mov ax, [mode_info + 0x12]
-    mov [lfb_pitch], ax
+    movzx eax, word [mode_info + 0x10]
+    mov [lfb_pitch], eax 
 
     lgdt [gdt_desc]
 

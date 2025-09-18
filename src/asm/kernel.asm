@@ -10,11 +10,11 @@ start:
     mov sp, 0x7C00
 
     mov ax, 0x4F02
-    mov bx, 0x11F | 0x4000
+    mov bx, 0x118 | 0x4000
     int 0x10
 
     mov ax, 0x4F01
-    mov cx, 0x11F
+    mov cx, 0x118
     mov di, mode_info
     int 0x10
     
@@ -23,8 +23,8 @@ start:
     mov eax, [mode_info + 0x28]
     mov [lfb_addr], eax
 
-    mov ax, [mode_info + 0x12]
-    mov [lfb_pitch], ax
+    movzx eax, word [mode_info + 0x10]
+    mov [lfb_pitch], eax 
 
     lgdt [gdt_desc]
 
@@ -49,36 +49,64 @@ pm_start:
 KEYS dd 128 dup(0)
 
 
+c98151:
+dd 10.0
+
+c78468:
+dd 1.0
+
 x:
 dd 0
+
+one_constant:
+dd 1.0
+
+x_f:
+dd 0.0
 
 y:
 dd 0
 
-j5704:
+j2690:
 
-CheckKeyboard9891:
+CheckKeyboard5343:
     in al, 0x64
     test al, 1
-    jz Done9891
+    jz Done5343
     in al, 0x60
     cmp al, 0x80
-    jb Pressed9891
+    jb Pressed5343
     sub al, 0x80
     mov byte [KEYS+eax], 0
-    jmp Done9891
+    jmp Done5343
 
-Pressed9891:
+Pressed5343:
     mov byte [KEYS+eax], 1
 
-Done9891:
+Done5343:
     cmp byte [KEYS+0x1E], 1
-    jne false9891
+    jne false5343
     sub byte [KEYS+0x1E], 1
-    jmp true9891
+    jmp true5343
 
 
-true9891:
+true5343:
+
+
+
+fild dword [x]
+fstp dword [x_f]
+
+fld dword [x_f]
+fdiv dword [c98151]
+fstp dword [x_f]
+mov eax, [x_f]
+cmp eax, [one_constant]
+je true6881
+jne false6881
+
+true6881:
+
 
 
 
@@ -98,6 +126,18 @@ add edi, ecx
 mov dword [edi], 0xFF0000
 
 
+
+fld dword [one_constant]
+fadd dword [c78468]
+fstp dword [one_constant]
+
+jmp escape6881
+
+false6881:
+
+
+escape6881:
+
 mov eax, [x]
 add eax, 1
 mov dword [x], eax
@@ -105,14 +145,14 @@ mov eax, [y]
 add eax, 1
 mov dword [y], eax
 
-jmp escape9891
+jmp escape5343
 
-false9891:
+false5343:
 
 
-escape9891:
+escape5343:
 
-jmp j5704
+jmp j2690
 
 
 
