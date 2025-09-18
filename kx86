@@ -66,12 +66,13 @@ def draw_pixel(x, y, color):
     mov eax, esi
     mov ebx, {x}
     mov ecx, {y}
-    mov edx, 1024
-    mov edi, eax
-    imul ecx, edx
-    add ecx, ebx
-    imul ecx, 3
-    add edi, ecx
+mov edi, eax
+mov dx, 1025
+movzx edx, dx
+imul ecx, edx
+add ecx, ebx
+imul ecx, 3
+add edi, ecx
     mov dword [edi], 0x{color[1:]}
 """
 
@@ -253,44 +254,56 @@ Done{bool_num}:
             case "op":
                 cmd[1] = arguments(cmd[1].strip(), ",", 1)
                 
-                if "+" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
+                if "++" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
                     bool = cmd[1][0].strip()
-                    bool = bool.split("+")
-                    final += f"\nmov eax, {bool[0].strip()}\nadd eax, {bool[1].strip()}\nmov dword {cmd[1][1]}, eax"
-                if "-" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
+                    bool = bool.split("++")
+                    final += f"\nmov eax, {bool[0].strip()}\nadd eax, {bool[1].strip()}\nmov dword {cmd[1][1].strip()}, eax"
+                elif "--" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
                     bool = cmd[1][0].strip()
-                    bool = bool.split("-")
-                    final += f"\nmov eax, {bool[0].strip()}\nsub eax, {bool[1].strip()}\nmov dword {cmd[1][1]}, eax"
-                if "*" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
+                    bool = bool.split("--")
+                    final += f"\nmov eax, {bool[0].strip()}\nsub eax, {bool[1].strip()}\nmov dword {cmd[1][1].strip()}, eax"
+                elif "**" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
                     bool = cmd[1][0].strip()
-                    bool = bool.split("*")
-                    final += f"\nmov eax, {bool[0].strip()}\nimul eax, {bool[1].strip()}\nmov dword {cmd[1][1]}, eax"
-                if "/" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
+                    bool = bool.split("**")
+                    final += f"\nmov eax, {bool[0].strip()}\nimul eax, {bool[1].strip()}\nmov dword {cmd[1][1].strip()}, eax"
+                elif "//" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("//")
+                    final += f"\nmov eax, {bool[0].strip()}\nidiv eax, {bool[1].strip()}\nmov dword {cmd[1][1].strip()}, eax"
+                elif "/" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
                     bool = cmd[1][0].strip()
                     bool = bool.split("/")
-                    final += f"\nmov eax, {bool[0].strip()}\nidiv eax, {bool[1].strip()}\nmov dword {cmd[1][1]}, eax"
-                
+                    final += f"\nfld dword {bool[0].strip()}\nfdiv dword {bool[1].strip()}\nfstp dword {cmd[1][1].strip()}"
+                elif "*" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("*")
+                    final += f"\nfld dword {bool[0].strip()}\nfmul dword {bool[1].strip()}\nfstp dword {cmd[1][1].strip()}"
+                elif "+" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("+")
+                    final += f"\nfld dword {bool[0].strip()}\nfadd dword {bool[1].strip()}\nfstp dword {cmd[1][1].strip()}"
+                elif "-" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("-")
+                    final += f"\nfld dword {bool[0].strip()}\nfsub dword {bool[1].strip()}\nfstp dword {cmd[1][1].strip()}"
+                elif ">f" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
+                    bool = cmd[1][0].strip()
+                    bool = bool.split(">f")
+                    final += f"""
+fild dword {bool[0].strip()}
+fstp dword {cmd[1][1].strip()}
+"""
+                if ">i" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
+                    bool = cmd[1][0].strip()
+                    bool = bool.split(">i")
+                    final += f"""
+fld dword {bool[0].strip()}
+fistp dword {cmd[1][1].strip()}
+"""
             case "array":
                 cmd[1] = arguments(cmd[1].strip(), ",", 1)
                 data["[" + cmd[1][0].strip() + "]"] = "array"
                 final += "\n" + cmd[1][0].strip() + f":\ndd {cmd[1][1].strip()}\n"
-
-            case "cast":
-                cmd[1] = arguments(cmd[1].strip(), ",", 1)
-                if cmd[1][0].strip() == "float":
-                    final += f"""
-{cmd[1][1].strip()[1:-1]}_f:
-dd 0
-fild dword {cmd[1][1].strip()}
-fstp dword [{cmd[1][1].strip()[1:-1]}_f]
-"""
-                elif cmd[1][0].strip() == "int":
-                    final += f"""
-{cmd[1][1].strip()[1:-1]}_i:
-dd 0
-fld dword {cmd[1][1].strip()}
-fistp dword [{cmd[1][1].strip()[1:-1]}_i]
-"""
 
     return final
     

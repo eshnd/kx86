@@ -1,17 +1,23 @@
 num: x, 0;
-num: y, 50;
+num: x_f, 0.0;
+num: one, 1.0;
+num: divisor, 1.0;
+num: constant_one, 1.0;
+num: y, 1;
 
 pack: inc_y,
-    op: [y] + 1, [y] &
-    edit: [x], 0 &
+    pixel: [x], [y], #FF0000 &
+    op: [one] + [constant_one], [one] &
 ;
 
 pack: draw,
-    pixel: [x], [y], #FF0000 &
-    op: [x] + 1, [x] &
-    if: [x] == 1020,
+    op: [x] >f, [x_f] &
+    op: [x_f] / [divisor], [x_f] &
+    if: [x_f] == [one],
         then=inc_y,
         else=NONE &
+    op: [x] ++ 1, [x] &
+    op: [y] ++ 1, [y] &
 ;
 
 pack: func,
@@ -22,12 +28,7 @@ if: a,
 
 forever: func;
 
-
-/:debug compiler running from other locations:/
-/: features to add: get keys and mouse:/
-/:key command will check what key is pressed and will store it in given var:/
+/:fix pixels:/
 /:time counter and sleeper:/
 /:write docs OR YOU WILL FORGET:/
-/:compiler argument to keep kernel assembly file:/
-/:make variables have underscores so it doesnt interfere with assembly variables!:/
-/: make it so that casting a variable makes you put the cast into another variable (make it an operation):/
+/:add float constant addition operator:/
