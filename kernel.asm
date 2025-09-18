@@ -10,16 +10,21 @@ start:
     mov sp, 0x7C00
 
     mov ax, 0x4F02
-    mov bx, 0x118 | 0x4000
+    mov bx, 0x11F | 0x4000
     int 0x10
 
     mov ax, 0x4F01
-    mov cx, 0x118
+    mov cx, 0x11F
     mov di, mode_info
     int 0x10
+    
+    
 
     mov eax, [mode_info + 0x28]
     mov [lfb_addr], eax
+
+    mov ax, [mode_info + 0x12]
+    mov [lfb_pitch], ax
 
     lgdt [gdt_desc]
 
@@ -44,94 +49,63 @@ pm_start:
 KEYS dd 128 dup(0)
 
 
-c56985:
-dd 1.0
-
-c16463:
-dd 1.0
-
 x:
 dd 0
 
-x_f:
-dd 0.0
-
-one:
-dd 1.0
-
-constant_one:
-dd 1.0
-
-divisor:
-dd 1.0
-
 y:
-dd 1
+dd 0
 
-j9032:
+j8506:
 
-CheckKeyboard8840:
+CheckKeyboard5345:
     in al, 0x64
     test al, 1
-    jz Done8840
+    jz Done5345
     in al, 0x60
     cmp al, 0x80
-    jb Pressed8840
+    jb Pressed5345
     sub al, 0x80
     mov byte [KEYS+eax], 0
-    jmp Done8840
+    jmp Done5345
 
-Pressed8840:
+Pressed5345:
     mov byte [KEYS+eax], 1
 
-Done8840:
+Done5345:
     cmp byte [KEYS+0x1E], 1
-    jne false8840
+    jne false5345
     sub byte [KEYS+0x1E], 1
-    jmp true8840
+    jmp true5345
 
 
-true8840:
-
-
-
-fild dword [x]
-fstp dword [x_f]
-
-fld dword [x_f]
-fdiv dword [c56985]
-fstp dword [x_f]
-mov eax, [x_f]
-cmp eax, [one]
-je true7391
-jne false7391
-
-true7391:
+true5345:
 
 
 
-    mov eax, esi
-    mov ebx, [x]
-    mov ecx, [y]
-mov edi, eax
-mov dx, 1024
-movzx edx, dx
-imul ecx, edx
-add ecx, ebx
-imul ecx, 3
-add edi, ecx
-    mov dword [edi], 0xFF0000
+; inputs: esi = lfb base
+;         x = 100
+;         y = 100
+;         color = red (0xFF0000)
 
-fld dword [one]
-fadd dword [c16463]
-fstp dword [one]
+mov edi, esi          ; edi = lfb base
 
-jmp escape7391
+; compute y * pitch
+mov ecx, [y]          ; y
+mov dx, [lfb_pitch]   ; pitch
+movzx edx, dx         ; edx = pitch (32-bit)
+imul ecx, edx         ; ecx = y * pitch
 
-false7391:
+; compute x * 3 (3 bytes per pixel)
+mov eax, [x]          ; x
+imul eax, 3           ; eax = x * 3
 
+; total offset
+add ecx, eax
+add edi, ecx          ; edi = pixel address
 
-escape7391:
+; write pixel (B G R)
+mov dword [edi], 0xFF0000
+
 
 mov eax, [x]
 add eax, 1
@@ -140,19 +114,22 @@ mov eax, [y]
 add eax, 1
 mov dword [y], eax
 
-jmp escape8840
+jmp escape5345
 
-false8840:
+false5345:
 
 
-escape8840:
+escape5345:
 
-jmp j9032
+jmp j8506
 
 
 
 align 4
 lfb_addr: dd 0
+lfb_pitch: dd 0
+zero: dd 0
+
 
 mode_info: times 256 db 0
 

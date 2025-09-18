@@ -1,21 +1,8 @@
 num: x, 0;
-num: x_f, 0.0;
-num: one, 1.0;
-num: constant_one, 1.0;
-num: divisor, 1.0;
-num: y, 1;
-
-pack: inc_y,
-    pixel: [x], [y], #FF0000 &
-    op: [one] +++ 1.0, [one] &
-;
+num: y, 0;
 
 pack: draw,
-    op: [x] >f, [x_f] &
-    op: [x_f] /// 1.0, [x_f] &
-    if: [x_f] == [one],
-        then=inc_y,
-        else=NONE &
+    pixel: [x], [y], #FF0000 &
     op: [x] ++ 1, [x] &
     op: [y] ++ 1, [y] &
 ;
