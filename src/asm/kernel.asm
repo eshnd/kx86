@@ -55,30 +55,30 @@ dd 0
 y:
 dd 0
 
-j8195:
+j5704:
 
-CheckKeyboard8664:
+CheckKeyboard9891:
     in al, 0x64
     test al, 1
-    jz Done8664
+    jz Done9891
     in al, 0x60
     cmp al, 0x80
-    jb Pressed8664
+    jb Pressed9891
     sub al, 0x80
     mov byte [KEYS+eax], 0
-    jmp Done8664
+    jmp Done9891
 
-Pressed8664:
+Pressed9891:
     mov byte [KEYS+eax], 1
 
-Done8664:
+Done9891:
     cmp byte [KEYS+0x1E], 1
-    jne false8664
+    jne false9891
     sub byte [KEYS+0x1E], 1
-    jmp true8664
+    jmp true9891
 
 
-true8664:
+true9891:
 
 
 
@@ -105,14 +105,14 @@ mov eax, [y]
 add eax, 1
 mov dword [y], eax
 
-jmp escape8664
+jmp escape9891
 
-false8664:
+false9891:
 
 
-escape8664:
+escape9891:
 
-jmp j8195
+jmp j5704
 
 
 
