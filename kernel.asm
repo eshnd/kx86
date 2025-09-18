@@ -44,10 +44,10 @@ pm_start:
 KEYS dd 128 dup(0)
 
 
-c84310:
+c57208:
 dd 1.0
 
-c72754:
+c8662:
 dd 1.0
 
 x:
@@ -68,30 +68,30 @@ dd 1.0
 y:
 dd 1
 
-j8787:
+j9376:
 
-CheckKeyboard5782:
+CheckKeyboard7835:
     in al, 0x64
     test al, 1
-    jz Done5782
+    jz Done7835
     in al, 0x60
     cmp al, 0x80
-    jb Pressed5782
+    jb Pressed7835
     sub al, 0x80
     mov byte [KEYS+eax], 0
-    jmp Done5782
+    jmp Done7835
 
-Pressed5782:
+Pressed7835:
     mov byte [KEYS+eax], 1
 
-Done5782:
+Done7835:
     cmp byte [KEYS+0x1E], 1
-    jne false5782
+    jne false7835
     sub byte [KEYS+0x1E], 1
-    jmp true5782
+    jmp true7835
 
 
-true5782:
+true7835:
 
 
 
@@ -99,14 +99,14 @@ fild dword [x]
 fstp dword [x_f]
 
 fld dword [x_f]
-fdiv dword [c84310]
+fdiv dword [c57208]
 fstp dword [x_f]
 mov eax, [x_f]
 cmp eax, [one]
-je true9575
-jne false9575
+je true6376
+jne false6376
 
-true9575:
+true6376:
 
 
 
@@ -114,7 +114,7 @@ true9575:
     mov ebx, [x]
     mov ecx, [y]
 mov edi, eax
-mov dx, 1025
+mov dx, 1024
 movzx edx, dx
 imul ecx, edx
 add ecx, ebx
@@ -123,15 +123,15 @@ add edi, ecx
     mov dword [edi], 0xFF0000
 
 fld dword [one]
-fadd dword [c72754]
+fadd dword [c8662]
 fstp dword [one]
 
-jmp escape9575
+jmp escape6376
 
-false9575:
+false6376:
 
 
-escape9575:
+escape6376:
 
 mov eax, [x]
 add eax, 1
@@ -140,14 +140,14 @@ mov eax, [y]
 add eax, 1
 mov dword [y], eax
 
-jmp escape5782
+jmp escape7835
 
-false5782:
+false7835:
 
 
-escape5782:
+escape7835:
 
-jmp j8787
+jmp j9376
 
 
 
