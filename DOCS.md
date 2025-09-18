@@ -45,7 +45,7 @@ for if: `if: CONDITIONAL, then=FUNCTION_NAME, else=NONE;`
 for if/else: `if: CONDITIONAL, then=FUNCTION_NAME, else=FUNCTION2_NAME;`     
 if statements can also be used to check if a key is down (the same applies to while loops)      
 for example: `if: key=a, then=FUNCTION_NAME, else=FUNCTION2_NAME;`
-# pixel
+# put pixel
 `pixel: X_COORD, Y_COORD, #COLORHEX;`
 # commenting
 `//: single-line comment;`     
