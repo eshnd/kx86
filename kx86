@@ -8,6 +8,58 @@ packs = {}
 labels = []
 bools = []
 mice = []
+letterdict = {
+    "a": "0x1E",
+    "b": "0x30",
+    "c": "0x2E",
+    "d": "0x20",
+    "e": "0x12",
+    "f": "0x21",
+    "g": "0x22",
+    "h": "0x23",
+    "i": "0x17",
+    "j": "0x24",
+    "k": "0x25",
+    "l": "0x26",
+    "m": "0x32",
+    "n": "0x31",
+    "o": "0x18",
+    "p": "0x19",
+    "q": "0x10",
+    "r": "0x13",
+    "s": "0x1F",
+    "t": "0x14",
+    "u": "0x16",
+    "v": "0x2F",
+    "w": "0x11",
+    "x": "0x2D",
+    "y": "0x15",
+    "z": "0x2C",
+    "1": "0x02",
+    "2": "0x03",
+    "3": "0x04",
+    "4": "0x05",
+    "5": "0x06",
+    "6": "0x07",
+    "7": "0x08",
+    "8": "0x09",
+    "9": "0x0A",
+    "0": "0x0B",
+    "lshift": "0x2A",
+    "rshift": "0x36",
+    "ctrl": "0x1D",
+    "alt": "0x38",
+    "up": "0x48",
+    "down": "0x50",
+    "left": "0x4B",
+    "right": "0x4D",
+    "enter": "0x1C",
+    "space": "0x39",
+    "backspace": "0x0E",
+    "tab": "0x0F",
+    "esc": "0x01"
+}
+
 
 def draw_pixel(x, y, color):
     return f"""
@@ -34,7 +86,7 @@ def kx86_compile(body, splitter = ";"):
     while "/:" and ":/" in body:
         body = body[:body.index("/:")] + body[body.index(":/") + 2:]
     final = ""
-    global data, packs, labels, bools
+    global data, packs, labels, bools, mice, letterdict
     body = body.split(splitter)
     for i in range(len(body)):
         cmd = body[i].strip()
@@ -130,6 +182,25 @@ def kx86_compile(body, splitter = ";"):
                 else:
                     bool = cmd[1][0].strip() # this is the key that you're checking is pressed
                     final += f"""
+CheckKeyboard{bool_num}:
+    in al, 0x64
+    test al, 1
+    jz Done{bool_num}
+    in al, 0x60
+    cmp al, 0x80
+    jb Pressed{bool_num}
+    sub al, 0x80
+    mov byte [KEYS+eax], 0
+    jmp Done{bool_num}
+
+Pressed{bool_num}:
+    mov byte [KEYS+eax], 1
+
+Done{bool_num}:
+    cmp byte [KEYS+{letterdict[bool]}], 1
+    jne false{bool_num}
+    sub byte [KEYS+{letterdict[bool]}], 1
+    jmp true{bool_num}
 
 """
 

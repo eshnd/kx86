@@ -1,8 +1,26 @@
-pack: looper,
-    pixel: [mouse_x], [mouse_y], #FF0000 &
+num: x, 0;
+num: y, 50;
+
+pack: inc_y,
+    op: [y] + 1, [y] &
+    edit: [x], 0 &
 ;
 
-forever: looper;
+pack: draw,
+    pixel: [x], [y], #FF0000 &
+    op: [x] + 1, [x] &
+    if: [x] == 1020,
+        then=inc_y,
+        else=NONE &
+;
+
+pack: func,
+if: a,
+    then=draw,
+    else=NONE &
+;
+
+forever: func;
 
 
 /:debug compiler running from other locations:/
