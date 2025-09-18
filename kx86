@@ -8,6 +8,8 @@ packs = {}
 labels = []
 bools = []
 mice = []
+constants = []
+init_vars = ""
 letterdict = {
     "a": "0x1E",
     "b": "0x30",
@@ -67,7 +69,7 @@ def draw_pixel(x, y, color):
     mov ebx, {x}
     mov ecx, {y}
 mov edi, eax
-mov dx, 1025
+mov dx, 1024
 movzx edx, dx
 imul ecx, edx
 add ecx, ebx
@@ -87,7 +89,7 @@ def kx86_compile(body, splitter = ";"):
     while "/:" and ":/" in body:
         body = body[:body.index("/:")] + body[body.index(":/") + 2:]
     final = ""
-    global data, packs, labels, bools, mice, letterdict
+    global data, packs, labels, bools, mice, letterdict, constants, init_vars
     body = body.split(splitter)
     for i in range(len(body)):
         cmd = body[i].strip()
@@ -253,8 +255,55 @@ Done{bool_num}:
                 final += f"\nfalse{bool_num}:\n\n"
             case "op":
                 cmd[1] = arguments(cmd[1].strip(), ",", 1)
-                
-                if "++" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
+                if "---" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("---")
+                    constant = random.randint(1,100000)
+                    while constant in constants:
+                        constant = random.randint(1,100000)
+                    constants.append(constant)
+                    init_vars += f"""
+c{constant}:
+dd {bool[1].strip()}
+"""
+                    final += f"\nfld dword {bool[0].strip()}\nfsub dword [c{constant}]\nfstp dword {cmd[1][1].strip()}"
+                elif "+++" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("+++")
+                    constant = random.randint(1,100000)
+                    while constant in constants:
+                        constant = random.randint(1,100000)
+                    constants.append(constant)
+                    init_vars += f"""
+c{constant}:
+dd {bool[1].strip()}
+"""
+                    final += f"\nfld dword {bool[0].strip()}\nfadd dword [c{constant}]\nfstp dword {cmd[1][1].strip()}"
+                elif "***" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("***")
+                    constant = random.randint(1,100000)
+                    while constant in constants:
+                        constant = random.randint(1,100000)
+                    constants.append(constant)
+                    init_vars += f"""
+c{constant}:
+dd {bool[1].strip()}
+"""
+                    final += f"\nfld dword {bool[0].strip()}\nfmul dword [c{constant}]\nfstp dword {cmd[1][1].strip()}"
+                elif "///" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("///")
+                    constant = random.randint(1,100000)
+                    while constant in constants:
+                        constant = random.randint(1,100000)
+                    constants.append(constant)
+                    init_vars += f"""
+c{constant}:
+dd {bool[1].strip()}
+"""
+                    final += f"\nfld dword {bool[0].strip()}\nfdiv dword [c{constant}]\nfstp dword {cmd[1][1].strip()}"
+                elif "++" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
                     bool = cmd[1][0].strip()
                     bool = bool.split("++")
                     final += f"\nmov eax, {bool[0].strip()}\nadd eax, {bool[1].strip()}\nmov dword {cmd[1][1].strip()}, eax"
@@ -286,6 +335,7 @@ Done{bool_num}:
                     bool = cmd[1][0].strip()
                     bool = bool.split("-")
                     final += f"\nfld dword {bool[0].strip()}\nfsub dword {bool[1].strip()}\nfstp dword {cmd[1][1].strip()}"
+
                 elif ">f" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
                     bool = cmd[1][0].strip()
                     bool = bool.split(">f")
@@ -304,9 +354,8 @@ fistp dword {cmd[1][1].strip()}
                 cmd[1] = arguments(cmd[1].strip(), ",", 1)
                 data["[" + cmd[1][0].strip() + "]"] = "array"
                 final += "\n" + cmd[1][0].strip() + f":\ndd {cmd[1][1].strip()}\n"
-
     return final
-    
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--file", type=str, nargs="+", help="file or files to compile")
@@ -318,8 +367,8 @@ if __name__ == "__main__":
     for i in range(len(args.file)):
         with open(args.file[i], "r") as f:
             body += "\n" + f.read()
-    
-    asm86.kernel += kx86_compile(body).replace("@", " + ").replace("{", "").replace("}", "")
+    finale = kx86_compile(body).replace("@", " + ").replace("{", "").replace("}", "")
+    asm86.kernel += init_vars + finale
     if args.show_asm:
         asm86.create_image(args.output, args.show_asm.strip())
     else:
