@@ -1,4 +1,6 @@
 # kx86
-an imperative, modular language to make x86 OS kernels but easy
+an imperative, modular programming language to make x86 kernel development easy
 # how it works
-each command in kx86 corresponds to a set of assembly commands. when you compile your code, all the assembly stuff will be put together and compiled with nasm. the functionality is written in x86 assembly and the parser is written in python3
+kx86 programs compile to a kernel which is then combined with a bootloader to make an os image
+# src info
+the functionality is written in x86 assembly and the parser is written in python3
