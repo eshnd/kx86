@@ -252,7 +252,30 @@ Done{bool_num}:
                     bool = cmd[1][0].strip()
                     bool = bool.split(">")
                     final += f"\nmov eax, {bool[0].strip()}\ncmp eax, {bool[1].strip()}\njg true{bool_num}\njle false{bool_num}\n"
-                
+                else:
+                    bool = cmd[1][0].strip() # this is the key that you're checking is pressed
+                    final += f"""
+CheckKeyboard{bool_num}:
+    in al, 0x64
+    test al, 1
+    jz Done{bool_num}
+    in al, 0x60
+    cmp al, 0x80
+    jb Pressed{bool_num}
+    sub al, 0x80
+    mov byte [KEYS+eax], 0
+    jmp Done{bool_num}
+
+Pressed{bool_num}:
+    mov byte [KEYS+eax], 1
+
+Done{bool_num}:
+    cmp byte [KEYS+{letterdict[bool.lower()[-1]]}], 1
+    jne false{bool_num}
+    sub byte [KEYS+{letterdict[bool.lower()[-1]]}], 1
+    jmp true{bool_num}
+
+"""
                 final += f"\ntrue{bool_num}:\n\n"
                 final += "\n" + kx86_compile(packs[cmd[1][1].strip()[5:]], "&") + "\n"
                 final += "\n" + f"jmp while{bool_num}" + "\n"
