@@ -188,6 +188,78 @@ def kx86_compile(body, splitter = ";"):
                     bool = cmd[1][0].strip()
                     bool = bool.split(">")
                     final += f"\nmov eax, {bool[0].strip()}\ncmp eax, {bool[1].strip()}\njg true{bool_num}\njle false{bool_num}\n"
+                elif ">=!" in cmd[1][0]:
+                    bool = cmd[1][0].strip()
+                    bool = bool.split(">=!")
+                    constant = random.randint(1,100000)
+                    while constant in constants:
+                        constant = random.randint(1,100000)
+                    constants.append(constant)
+                    init_vars += f"""
+c{constant}:
+dd {bool[1].strip()}
+"""
+                    final += f"\nmov eax, {bool[0].strip()}\ncmp eax, [c{constant}]\njge true{bool_num}\njl false{bool_num}\n"
+                elif "<=!" in cmd[1][0]:
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("<=!")
+                    constant = random.randint(1,100000)
+                    while constant in constants:
+                        constant = random.randint(1,100000)
+                    constants.append(constant)
+                    init_vars += f"""
+c{constant}:
+dd {bool[1].strip()}
+"""
+                    final += f"\nmov eax, {bool[0].strip()}\ncmp eax, [c{constant}]\njle true{bool_num}\njg false{bool_num}\n"
+                elif "==!" in cmd[1][0]:
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("==!")
+                    constant = random.randint(1,100000)
+                    while constant in constants:
+                        constant = random.randint(1,100000)
+                    constants.append(constant)
+                    init_vars += f"""
+c{constant}:
+dd {bool[1].strip()}
+"""
+                    final += f"\nmov eax, {bool[0].strip()}\ncmp eax, [c{constant}]\nje true{bool_num}\njne false{bool_num}\n"
+                elif "!=!" in cmd[1][0]:
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("!=!")
+                    constant = random.randint(1,100000)
+                    while constant in constants:
+                        constant = random.randint(1,100000)
+                    constants.append(constant)
+                    init_vars += f"""
+c{constant}:
+dd {bool[1].strip()}
+"""
+                    final += f"\nmov eax, {bool[0].strip()}\ncmp eax, [c{constant}]\njne true{bool_num}\nje false{bool_num}\n"
+                elif "<!" in cmd[1][0]:
+                    bool = cmd[1][0].strip()
+                    bool = bool.split("<!")
+                    constant = random.randint(1,100000)
+                    while constant in constants:
+                        constant = random.randint(1,100000)
+                    constants.append(constant)
+                    init_vars += f"""
+c{constant}:
+dd {bool[1].strip()}
+"""
+                    final += f"\nmov eax, {bool[0].strip()}\ncmp eax, [c{constant}]\njl true{bool_num}\njge false{bool_num}\n"
+                elif ">!" in cmd[1][0]:
+                    bool = cmd[1][0].strip()
+                    bool = bool.split(">!")
+                    constant = random.randint(1,100000)
+                    while constant in constants:
+                        constant = random.randint(1,100000)
+                    constants.append(constant)
+                    init_vars += f"""
+c{constant}:
+dd {bool[1].strip()}
+"""
+                    final += f"\nmov eax, {bool[0].strip()}\ncmp eax, [c{constant}]\njg true{bool_num}\njle false{bool_num}\n"
                 else:
                     bool = cmd[1][0].strip() # this is the key that you're checking is pressed
                     final += f"""
