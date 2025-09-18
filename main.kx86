@@ -8,9 +8,9 @@ pack: draw,
 ;
 
 pack: func,
-if: key=a,
-    then=draw,
-    else=NONE &
+    if: key=a,
+        then=draw,
+        else=NONE &
 ;
 
 forever: func;
