@@ -65,28 +65,19 @@ letterdict = {
 
 def draw_pixel(x, y, color):
     return f"""
-; inputs: esi = lfb base
-;         x = 100
-;         y = 100
-;         color = red (0xFF0000)
 
-mov edi, esi          ; edi = lfb base
+mov edi, esi       
+mov ecx, {y}    
+mov dx, [lfb_pitch] 
+movzx edx, dx      
+imul ecx, edx   
 
-; compute y * pitch
-mov ecx, {y}          ; y
-mov dx, [lfb_pitch]   ; pitch
-movzx edx, dx         ; edx = pitch (32-bit)
-imul ecx, edx         ; ecx = y * pitch
+mov eax, {x}        
+imul eax, 3         
 
-; compute x * 3 (3 bytes per pixel)
-mov eax, {x}          ; x
-imul eax, 3           ; eax = x * 3
-
-; total offset
 add ecx, eax
-add edi, ecx          ; edi = pixel address
+add edi, ecx        
 
-; write pixel (B G R)
 mov dword [edi], 0x{color[1:]}
 
 """
