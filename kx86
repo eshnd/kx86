@@ -200,9 +200,9 @@ Pressed{bool_num}:
     mov byte [KEYS+eax], 1
 
 Done{bool_num}:
-    cmp byte [KEYS+{letterdict[bool]}], 1
+    cmp byte [KEYS+{letterdict[bool.lower()[-1]]}], 1
     jne false{bool_num}
-    sub byte [KEYS+{letterdict[bool]}], 1
+    sub byte [KEYS+{letterdict[bool.lower()[-1]]}], 1
     jmp true{bool_num}
 
 """

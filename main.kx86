@@ -21,7 +21,7 @@ pack: draw,
 ;
 
 pack: func,
-if: a,
+if: key=a,
     then=draw,
     else=NONE &
 ;
