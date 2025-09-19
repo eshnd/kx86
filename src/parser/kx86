@@ -92,13 +92,13 @@ def time_wait(ticks, rdm):
 mov ebx, eax
 imul ebx, 270270
 
-outer_loop:
+outer_loop{rdm}:
     mov ecx, 580
-inner_loop:
+inner_loop{rdm}:
     dec ecx
-    jnz inner_loop
+    jnz inner_loop{rdm}
     dec ebx
-    jnz outer_loop
+    jnz outer_loop{rdm}
     """
 
 def draw_pixel(x1, y1, x2, y2, color, rdm):

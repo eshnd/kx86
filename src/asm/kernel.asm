@@ -65,13 +65,24 @@ dd 1
 mov ebx, eax
 imul ebx, 270270
 
-outer_loop:
+outer_loop9944:
     mov ecx, 580
-inner_loop:
+inner_loop9944:
     dec ecx
-    jnz inner_loop
+    jnz inner_loop9944
     dec ebx
-    jnz outer_loop
+    jnz outer_loop9944
+    
+mov ebx, eax
+imul ebx, 270270
+
+outer_loop9834:
+    mov ecx, 580
+inner_loop9834:
+    dec ecx
+    jnz inner_loop9834
+    dec ebx
+    jnz outer_loop9834
     
 
     mov esi, [lfb_addr]  
@@ -111,7 +122,7 @@ pixel_loop:
 
 
 
-j1974:
+j8628:
 
 mov eax, [i]
 add eax, 1
@@ -119,7 +130,7 @@ mov dword [i], eax
 mov eax, [i]
 sub eax, 1
 mov dword [i], eax
-jmp j1974
+jmp j8628
 
 
 
