@@ -75,8 +75,8 @@ multi-line comment
 # to compile
 `kx86 -f <KERNEL-FILE-PATH> -o <OS-IMAGE-FILEPATH>`
 # to run (linux)
-`qemu-system-i386 -drive format=raw,file=<OS-IMAGE-FILEPATH> -vga std -accel kvm -cpu max -m 1G`
+`qemu-system-i386 -drive format=raw,file=<OS-IMAGE-FILEPATH> -vga std -accel kvm -cpu max -m <MEM-AMOUNT>`
 # to run (windows)
-`qemu-system-i386 -drive format=raw,file=<OS-IMAGE-FILEPATH> -vga std -cpu max -m 1G`
+`qemu-system-i386 -drive format=raw,file=<OS-IMAGE-FILEPATH> -vga std -cpu max -m <MEM-AMOUNT>`
 # to run (mac)
-`qemu-system-i386 -drive format=raw,file=<OS-IMAGE-FILEPATH> -vga std -accel hvf -cpu max -m 1G`
+`qemu-system-i386 -drive format=raw,file=<OS-IMAGE-FILEPATH> -vga std -accel hvf -cpu max -m <MEM-AMOUNT>`
