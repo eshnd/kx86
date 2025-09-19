@@ -1,5 +1,7 @@
 # kx86 docs
 kdx86 is an imperative, modular programming language to make x86 kernel development easy
+# requirements
+to run the kx86 compiler, you need to have python3 & nasm installed and added to path. to run the compiled image, you need to have qemu installed and added to pathboth work on windows, mac, and linux
 # num
 to define: `num: VAR_NAME, VALUE;` (these can only be defined at the top of your code)     
 to access values: `[VAR_NAME]`      
@@ -67,11 +69,14 @@ for example: `if: [FLOAT_VAR] <=! 1.0`
 `//: single-line comment;`     
 ```
 /:
-
 multi-line comment
 :/
 ```
 # to compile
 `kx86 -f <KERNEL-FILE-PATH> -o <OS-IMAGE-FILEPATH>`
-# to run
+# to run (linux)
 `qemu-system-i386 -drive format=raw,file=<OS-IMAGE-FILEPATH> -vga std -accel kvm -cpu max -m 1G`
+# to run (windows)
+`qemu-system-i386 -drive format=raw,file=<OS-IMAGE-FILEPATH> -vga std -cpu max -m 1G`
+# to run (mac)
+`qemu-system-i386 -drive format=raw,file=<OS-IMAGE-FILEPATH> -vga std -accel hvf -cpu max -m 1G`
