@@ -10,7 +10,6 @@ rect: 50, 50, 500, 500, #FF0000;
 inf: infLoop;
 
 /:
-- fix timer function
 - add random number function
 - make vs code theme
 :/
