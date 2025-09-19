@@ -190,7 +190,7 @@ def kx86_compile(body, splitter = ";"):
                     final += kx86_compile(packs[cmd[1].strip()], "&") + "\n"
 
 
-            case "forever":
+            case "inf":
                 label = random.randint(1,10000)
                 while label in labels:
                     label = random.randint(1,10000)
