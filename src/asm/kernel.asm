@@ -10,11 +10,11 @@ start:
     mov sp, 0x7C00
 
     mov ax, 0x4F02
-    mov bx, 0x118 | 0x4000
+    mov bx, 0x11F | 0x4000
     int 0x10
 
     mov ax, 0x4F01
-    mov cx, 0x118
+    mov cx, 0x11F
     mov di, mode_info
     int 0x10
     
@@ -46,113 +46,62 @@ pm_start:
 
     mov esi, [lfb_addr]
 
-KEYS dd 128 dup(0)
-
-
-c90508:
-dd 10.0
-
-c10576:
-dd 1.0
-
-x:
-dd 0
-
-one_constant:
-dd 1.0
-
-x_f:
-dd 0.0
-
-y:
-dd 0
-
-j7499:
-
-CheckKeyboard2643:
-    in al, 0x64
-    test al, 1
-    jz Done2643
-    in al, 0x60
-    cmp al, 0x80
-    jb Pressed2643
-    sub al, 0x80
-    mov byte [KEYS+eax], 0
-    jmp Done2643
-
-Pressed2643:
-    mov byte [KEYS+eax], 1
-
-Done2643:
-    cmp byte [KEYS+0x1E], 1
-    jne false2643
-    sub byte [KEYS+0x1E], 1
-    jmp true2643
-
-
-true2643:
-
-
-
-fild dword [x]
-fstp dword [x_f]
-
-fld dword [x_f]
-fdiv dword [c90508]
-fstp dword [x_f]
-mov eax, [x_f]
-cmp eax, [one_constant]
-je true2837
-jne false2837
-
-true2837:
 
 
 
 
 
-mov edi, esi       
-mov ecx, [y]    
-mov dx, [lfb_pitch] 
-movzx edx, dx      
-imul ecx, edx   
-
-mov eax, [x]        
-imul eax, 3         
-
-add ecx, eax
-add edi, ecx        
-
-mov dword [edi], 0xFF0000
+i:
+dd 1
 
 
+    mov esi, [lfb_addr]  
+    mov edx, [lfb_pitch]  
 
-fld dword [one_constant]
-fadd dword [c10576]
-fstp dword [one_constant]
+    mov eax, 50
+    imul eax, edx         
+    add esi, eax
+    mov edi, esi
 
-jmp escape2837
+    mov eax, 500
+    sub eax, 50          
+    mov ebx, eax
 
-false2837:
+row_loop:
+    push ebx                  
+    mov edi, esi
+    mov eax, 50
+    imul eax, 3              
+    add edi, eax         
+
+    mov eax, 500
+    sub eax, 50        
+    mov ecx, eax
+
+pixel_loop:
+    mov byte [edi], 0x00 
+    mov byte [edi+1], 0x00 
+    mov byte [edi+2], 0xFF 
+    add edi, 3
+    loop pixel_loop
+
+    pop ebx
+    add esi, edx        
+    dec ebx
+    jnz row_loop
 
 
-escape2837:
 
-mov eax, [x]
+j2197:
+
+mov eax, [i]
 add eax, 1
-mov dword [x], eax
-mov eax, [y]
-add eax, 1
-mov dword [y], eax
+mov dword [i], eax
+mov eax, [i]
+sub eax, 1
+mov dword [i], eax
+jmp j2197
 
-jmp escape2643
-
-false2643:
-
-
-escape2643:
-
-jmp j7499
 
 
 
@@ -160,6 +109,7 @@ align 4
 lfb_addr: dd 0
 lfb_pitch: dd 0
 zero: dd 0
+KEYS dd 128 dup(0)
 
 
 mode_info: times 256 db 0
