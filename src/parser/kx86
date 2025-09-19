@@ -89,9 +89,9 @@ letterdict = {
 
 def time_wait(ticks, rdm):
     return f"""
-mov ebx, {ticks.strip()}
+mov ebx, {int(ticks.strip()) * 15}
 outer_loop{rdm}:
-    mov ecx, {int(ticks.strip()) * 2}
+    mov ecx, {int(ticks.strip()) * 15 * 2}
 inner_loop{rdm}:
     loop inner_loop{rdm}
     dec ebx

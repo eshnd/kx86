@@ -54,13 +54,13 @@ pm_start:
 i:
 dd 1
 
-mov ebx, 50000
-outer_loop5512:
-    mov ecx, 100000
-inner_loop5512:
-    loop inner_loop5512
+mov ebx, 75000
+outer_loop6713:
+    mov ecx, 150000
+inner_loop6713:
+    loop inner_loop6713
     dec ebx
-    jnz outer_loop5512
+    jnz outer_loop6713
     
 
     mov esi, [lfb_addr]  
@@ -100,7 +100,7 @@ pixel_loop:
 
 
 
-j5242:
+j3393:
 
 mov eax, [i]
 add eax, 1
@@ -108,7 +108,7 @@ mov dword [i], eax
 mov eax, [i]
 sub eax, 1
 mov dword [i], eax
-jmp j5242
+jmp j3393
 
 
 
