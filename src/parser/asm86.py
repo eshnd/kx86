@@ -78,11 +78,11 @@ start:
     mov sp, 0x7C00
 
     mov ax, 0x4F02
-    mov bx, 0x118 | 0x4000
+    mov bx, 0x11F | 0x4000
     int 0x10
 
     mov ax, 0x4F01
-    mov cx, 0x118
+    mov cx, 0x11F
     mov di, mode_info
     int 0x10
     
@@ -114,7 +114,9 @@ pm_start:
 
     mov esi, [lfb_addr]
 
-KEYS dd 128 dup(0)
+
+
+
 
 """
 
@@ -123,10 +125,12 @@ def create_image(name, show="*"):
     kernel += """
 
 
+
 align 4
 lfb_addr: dd 0
 lfb_pitch: dd 0
 zero: dd 0
+KEYS dd 128 dup(0)
 
 
 mode_info: times 256 db 0
