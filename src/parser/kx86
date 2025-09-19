@@ -175,6 +175,9 @@ def kx86_compile(body, splitter = ";"):
             case "pack":
                 cmd[1] = arguments(cmd[1].strip(), ",", 1)
                 packs[cmd[1][0].strip()] = cmd[1][1].strip()
+            case "asmpack":
+                cmd[1] = arguments(cmd[1].strip(), ",", 1)
+                packs[cmd[1][0].strip()] = cmd[1][1].strip()
             case "asmcall":
                 final += "\n" + packs[cmd[1].strip()] + "\n"
             case "call":
