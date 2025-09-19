@@ -1,4 +1,5 @@
 import os
+import subprocess
 import sys
 import random
 
@@ -182,12 +183,35 @@ DATA_SEL equ 0x10"""
     if show != "*":
         with open(show, "w") as f:
             f.write(kernel)
-    os.system(f"nasm -f bin .boot{id_num}.asm -o .boot{id_num}.bin")
-    os.system(f"nasm -f bin .kernel{id_num}.asm -o .kernel{id_num}.bin")
-    os.system(f"dd if=/dev/zero of={name} bs=512 count=2000")
-    os.system(f"dd if=.boot{id_num}.bin of={name} conv=notrunc")
-    os.system(f"dd if=.kernel{id_num}.bin of={name} bs=512 seek=1 conv=notrunc")
-    
+
+    def run_nasm(src, out):
+        subprocess.run(["nasm", "-f", "bin", src, "-o", out], check=True)
+
+    def make_image(name, boot_bin, kernel_bin):
+        size = 512 * 2000 
+        image = bytearray(size)
+
+        with open(boot_bin, "rb") as f:
+            boot = f.read()
+        image[0:len(boot)] = boot
+
+        with open(kernel_bin, "rb") as f:
+            kernel = f.read()
+        start = 512  
+        image[start:start+len(kernel)] = kernel
+
+        with open(name, "wb") as f:
+            f.write(image)
+
+    boot_asm = f".boot{id_num}.asm"
+    kernel_asm = f".kernel{id_num}.asm"
+    boot_bin = f".boot{id_num}.bin"
+    kernel_bin = f".kernel{id_num}.bin"
+
+    run_nasm(boot_asm, boot_bin)
+    run_nasm(kernel_asm, kernel_bin)
+    make_image(name, boot_bin, kernel_bin)
+
     os.remove(f".boot{id_num}.asm")
     os.remove(f".boot{id_num}.bin")
     os.remove(f".kernel{id_num}.asm")

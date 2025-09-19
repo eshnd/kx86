@@ -65,13 +65,13 @@ dd 1
 mov ebx, 5000
 imul ebx, 600
 
-outer_loop6568:
+outer_loop2815:
     mov ecx, 580
-inner_loop6568:
+inner_loop2815:
     dec ecx
-    jnz inner_loop6568
+    jnz inner_loop2815
     dec ebx
-    jnz outer_loop6568
+    jnz outer_loop2815
     
 
     mov esi, [lfb_addr]  
@@ -111,7 +111,7 @@ pixel_loop:
 
 
 
-j6769:
+j6170:
 
 mov eax, [i]
 add eax, 1
@@ -119,7 +119,7 @@ mov dword [i], eax
 mov eax, [i]
 sub eax, 1
 mov dword [i], eax
-jmp j6769
+jmp j6170
 
 
 
