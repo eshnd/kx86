@@ -118,11 +118,29 @@ pm_start:
 
 
 
+; KX86 STARTS HERE
+
+
+
+
+
+
+
 """
 
 def create_image(name, show="*"):
     global kernel
     kernel += """
+
+
+
+
+
+; KX86 ENDS HERE
+
+
+
+
 
 
 
