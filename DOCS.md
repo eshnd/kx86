@@ -67,6 +67,11 @@ for example: `if: [FLOAT_VAR] <=! 1.0`
 `//: single-line comment;`     
 ```
 /:
+
 multi-line comment
 :/
 ```
+# to compile
+`kx86 -f <KERNEL-FILE-PATH> -o <OS-IMAGE-FILEPATH>`
+# to run
+`qemu-system-i386 -drive format=raw,file=<OS-IMAGE-FILEPATH> -vga std -accel kvm -cpu max -m 1G`
