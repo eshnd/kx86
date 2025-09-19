@@ -5,6 +5,7 @@ pack: inf_loop,
     op: [i] -- 1, [i] & 
 ;
 
+pause: 50000;
 rect: 50, 50, 500, 500, #FF0000;
 forever: inf_loop;
 

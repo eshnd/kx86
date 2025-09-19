@@ -54,6 +54,14 @@ pm_start:
 i:
 dd 1
 
+mov ebx, 50000
+outer_loop5512:
+    mov ecx, 100000
+inner_loop5512:
+    loop inner_loop5512
+    dec ebx
+    jnz outer_loop5512
+    
 
     mov esi, [lfb_addr]  
     mov edx, [lfb_pitch]  
@@ -92,7 +100,7 @@ pixel_loop:
 
 
 
-j2197:
+j5242:
 
 mov eax, [i]
 add eax, 1
@@ -100,7 +108,7 @@ mov dword [i], eax
 mov eax, [i]
 sub eax, 1
 mov dword [i], eax
-jmp j2197
+jmp j5242
 
 
 
@@ -110,7 +118,6 @@ lfb_addr: dd 0
 lfb_pitch: dd 0
 zero: dd 0
 KEYS dd 128 dup(0)
-
 
 mode_info: times 256 db 0
 

@@ -132,7 +132,6 @@ lfb_pitch: dd 0
 zero: dd 0
 KEYS dd 128 dup(0)
 
-
 mode_info: times 256 db 0
 
 align 8

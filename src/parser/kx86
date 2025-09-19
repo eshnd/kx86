@@ -87,6 +87,16 @@ letterdict = {
 # pop ecx
 # add esi, edx       
 
+def time_wait(ticks, rdm):
+    return f"""
+mov ebx, {ticks.strip()}
+outer_loop{rdm}:
+    mov ecx, {int(ticks.strip()) * 2}
+inner_loop{rdm}:
+    loop inner_loop{rdm}
+    dec ebx
+    jnz outer_loop{rdm}
+    """
 
 def draw_pixel(x1, y1, x2, y2, color, rdm):
     return f"""
@@ -155,6 +165,12 @@ def kx86_compile(body, splitter = ";"):
                 pixs.append(rect)
                 cmd[1] = arguments(cmd[1].strip(), ",", 4)
                 final += draw_pixel(cmd[1][0].strip(), cmd[1][1].strip(), cmd[1][2].strip(), cmd[1][3].strip(), cmd[1][4].strip(), rect)
+            case "pause":
+                rect = random.randint(1,10000)
+                while rect in pixs:
+                    rect = random.randint(1,10000)
+                pixs.append(rect)
+                final += time_wait(cmd[1].strip(), rect)
             
             case "pack":
                 cmd[1] = arguments(cmd[1].strip(), ",", 1)
