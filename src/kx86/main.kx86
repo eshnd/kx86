@@ -7,7 +7,7 @@ pack: inf_loop,
 
 pause: 5000;
 rect: 50, 50, 500, 500, #FF0000;
-forever: inf_loop;
+inf: inf_loop;
 
 /:
 - time counter and sleeper
