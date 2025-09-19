@@ -8,6 +8,7 @@ packs = {}
 labels = []
 bools = []
 mice = []
+pixs = []
 constants = []
 init_vars = ""
 letterdict = {
@@ -63,23 +64,67 @@ letterdict = {
 }
 
 
-def draw_pixel(x, y, color):
+# mov esi, [lfb_addr]
+# mov edx, [lfb_pitch]
+
+# mov eax, edx
+# imul eax, {y}
+# add esi, eax
+# mov edi, esi
+
+# mov ebx, 1      
+# mov ecx, 1  
+
+# push ecx 
+# mov edi, esi
+# add edi, {x}*3     
+
+# mov byte [edi], 0x{color.strip()[5:7]} 
+# mov byte [edi+1], 0x{color.strip()[3:5]}
+# mov byte [edi+2], 0x{color.strip()[1:3]}
+# add edi, 3
+
+# pop ecx
+# add esi, edx       
+
+
+def draw_pixel(x1, y1, x2, y2, color, rdm):
     return f"""
 
+    mov esi, [lfb_addr]  
+    mov edx, [lfb_pitch]  
 
-mov edi, esi       
-mov ecx, {y}    
-mov dx, [lfb_pitch] 
-movzx edx, dx      
-imul ecx, edx   
+    mov eax, {y1}
+    imul eax, edx         
+    add esi, eax
+    mov edi, esi
 
-mov eax, {x}        
-imul eax, 3         
+    mov eax, {y2}
+    sub eax, {y1}          
+    mov ebx, eax
 
-add ecx, eax
-add edi, ecx        
+row_loop:
+    push ebx                  
+    mov edi, esi
+    mov eax, {x1}
+    imul eax, 3              
+    add edi, eax         
 
-mov dword [edi], 0x{color[1:]}
+    mov eax, {x2}
+    sub eax, {x1}        
+    mov ecx, eax
+
+pixel_loop:
+    mov byte [edi], 0x{color.strip()[5:7]} 
+    mov byte [edi+1], 0x{color.strip()[3:5]} 
+    mov byte [edi+2], 0x{color.strip()[1:3]} 
+    add edi, 3
+    loop pixel_loop
+
+    pop ebx
+    add esi, edx        
+    dec ebx
+    jnz row_loop
 
 
 """
@@ -95,7 +140,7 @@ def kx86_compile(body, splitter = ";"):
     while "/:" and ":/" in body:
         body = body[:body.index("/:")] + body[body.index(":/") + 2:]
     final = ""
-    global data, packs, labels, bools, mice, letterdict, constants, init_vars
+    global data, packs, labels, bools, mice, letterdict, constants, init_vars, pixs
     body = body.split(splitter)
     for i in range(len(body)):
         cmd = body[i].strip()
@@ -103,9 +148,13 @@ def kx86_compile(body, splitter = ";"):
             continue
         cmd = arguments(cmd, ":", 1)
         match cmd[0].strip():
-            case "pixel":
-                cmd[1] = arguments(cmd[1].strip(), ",", 2)
-                final += draw_pixel(cmd[1][0].strip(), cmd[1][1].strip(), cmd[1][2].strip())
+            case "rect":
+                rect = random.randint(1,10000)
+                while rect in pixs:
+                    rect = random.randint(1,10000)
+                pixs.append(rect)
+                cmd[1] = arguments(cmd[1].strip(), ",", 4)
+                final += draw_pixel(cmd[1][0].strip(), cmd[1][1].strip(), cmd[1][2].strip(), cmd[1][3].strip(), cmd[1][4].strip(), rect)
             
             case "pack":
                 cmd[1] = arguments(cmd[1].strip(), ",", 1)
