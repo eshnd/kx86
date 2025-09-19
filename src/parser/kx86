@@ -87,6 +87,23 @@ letterdict = {
 # pop ecx
 # add esi, edx       
 
+def asmrandom(max1, min1, out):
+    return f"""
+rdtsc
+xor eax, edx
+
+
+mov eax, eax 
+mov ecx, {max1}
+sub ecx, {min1}
+
+xor edx, edx
+div ecx 
+mov eax, edx 
+add eax, {min1}
+mov dword {out}, eax
+    """
+
 def time_wait(ticks, rdm):
     return f"""
 mov ecx, {ticks}
@@ -608,6 +625,9 @@ fistp dword {cmd[1][1].strip()}
                 cmd[1] = arguments(cmd[1].strip(), ",", 1)
                 data["[" + cmd[1][0].strip() + "]"] = "array"
                 final += "\n" + cmd[1][0].strip() + f":\ndd {cmd[1][1].strip()}\n"
+            case "random":
+                cmd[1] = arguments(cmd[1].strip(), ",", 2)
+                final += asmrandom(cmd[1][0].strip(), cmd[1][1].strip(), cmd[1][2].strip())
     return final
 
 if __name__ == "__main__":

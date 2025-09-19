@@ -73,14 +73,28 @@ pusha
 mov al, 0x36
 out 0x43, al
 mov bx, 1193
-.delay_loop_inline6081:
+.delay_loop_inline6085:
     mov ax, bx
-.wait_inline6081:
+.wait_inline6085:
     out 0x40, al
     dec ax
-    jnz .wait_inline6081
-    loop .delay_loop_inline6081
+    jnz .wait_inline6085
+    loop .delay_loop_inline6085
 popa
+    
+rdtsc
+xor eax, edx
+
+
+mov eax, eax 
+mov ecx, 0
+sub ecx, 70
+
+xor edx, edx
+div ecx 
+mov eax, edx 
+add eax, 70
+mov dword [i], eax
     
 
     mov esi, [lfb_addr]  
@@ -120,15 +134,9 @@ pixel_loop:
 
 
 
-j5822:
+j3876:
 
-mov eax, [i]
-add eax, 1
-mov dword [i], eax
-mov eax, [i]
-sub eax, 1
-mov dword [i], eax
-jmp j5822
+jmp j3876
 
 
 

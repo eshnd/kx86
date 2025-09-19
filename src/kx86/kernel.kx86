@@ -1,11 +1,10 @@
 num: i, 1;
 
 pack: infLoop,
-    op: [i] ++ 1, [i] &
-    op: [i] -- 1, [i] & 
 ;
 
 pause: 5000;
+random: 0, 70, [i];
 rect: 50, 50, 500, 500, #FF0000;
 inf: infLoop;
 
