@@ -50,17 +50,28 @@ pm_start:
 
 
 
+; KX86 STARTS HERE
+
+
+
+
+
+
+
 
 i:
 dd 1
 
-mov ebx, 75000
-outer_loop6713:
-    mov ecx, 150000
-inner_loop6713:
-    loop inner_loop6713
+mov ebx, eax
+imul ebx, 270270
+
+outer_loop:
+    mov ecx, 580
+inner_loop:
+    dec ecx
+    jnz inner_loop
     dec ebx
-    jnz outer_loop6713
+    jnz outer_loop
     
 
     mov esi, [lfb_addr]  
@@ -100,7 +111,7 @@ pixel_loop:
 
 
 
-j3393:
+j1974:
 
 mov eax, [i]
 add eax, 1
@@ -108,7 +119,17 @@ mov dword [i], eax
 mov eax, [i]
 sub eax, 1
 mov dword [i], eax
-jmp j3393
+jmp j1974
+
+
+
+
+
+
+; KX86 ENDS HERE
+
+
+
 
 
 

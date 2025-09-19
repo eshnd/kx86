@@ -89,13 +89,16 @@ letterdict = {
 
 def time_wait(ticks, rdm):
     return f"""
-mov ebx, {int(ticks.strip()) * 15}
-outer_loop{rdm}:
-    mov ecx, {int(ticks.strip()) * 15 * 2}
-inner_loop{rdm}:
-    loop inner_loop{rdm}
+mov ebx, eax
+imul ebx, 270270
+
+outer_loop:
+    mov ecx, 580
+inner_loop:
+    dec ecx
+    jnz inner_loop
     dec ebx
-    jnz outer_loop{rdm}
+    jnz outer_loop
     """
 
 def draw_pixel(x1, y1, x2, y2, color, rdm):
