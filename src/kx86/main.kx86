@@ -8,8 +8,3 @@ pack: infLoop,
 pause: 5000;
 rect: 50, 50, 500, 500, #FF0000;
 inf: infLoop;
-
-/:
-- time counter and sleeper
-- add new stuff docs OR YOU WILL FORGET
-:/
