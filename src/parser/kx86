@@ -90,7 +90,7 @@ letterdict = {
 def time_wait(ticks, rdm):
     return f"""
 mov ebx, {ticks}
-imul ebx, 600
+imul ebx, 7812
 
 outer_loop{rdm}:
     mov ecx, 580

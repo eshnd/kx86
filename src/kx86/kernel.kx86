@@ -5,6 +5,6 @@ pack: infLoop,
     op: [i] -- 1, [i] & 
 ;
 
-pause: 5000;
+pause: 10000;
 rect: 50, 50, 500, 500, #FF0000;
 inf: infLoop;
