@@ -89,16 +89,25 @@ letterdict = {
 
 def time_wait(ticks, rdm):
     return f"""
-mov ebx, {ticks}
-imul ebx, 7812
-
-outer_loop{rdm}:
-    mov ecx, 580
-inner_loop{rdm}:
-    dec ecx
-    jnz inner_loop{rdm}
-    dec ebx
-    jnz outer_loop{rdm}
+mov ecx, {ticks}
+mov eax, ecx
+imul eax, 135
+mov ebx, 100
+cdq
+idiv ebx
+mov ecx, eax
+pusha
+mov al, 0x36
+out 0x43, al
+mov bx, 1193
+.delay_loop_inline{rdm}:
+    mov ax, bx
+.wait_inline{rdm}:
+    out 0x40, al
+    dec ax
+    jnz .wait_inline{rdm}
+    loop .delay_loop_inline{rdm}
+popa
     """
 
 def draw_pixel(x1, y1, x2, y2, color, rdm):
@@ -563,7 +572,7 @@ dd {bool[1].strip()}
                 elif "//" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
                     bool = cmd[1][0].strip()
                     bool = bool.split("//")
-                    final += f"\nmov eax, {bool[0].strip()}\nidiv eax, {bool[1].strip()}\nmov dword {cmd[1][1].strip()}, eax"
+                    final += f"\nmov eax, {bool[0].strip()}\ncdq\nmov ecx, {bool[1].strip()}\nidiv ecx\nmov dword {cmd[1][1].strip()}, eax"
                 elif "/" in cmd[1][0]: # add compiler type corresponding THIS ISNT DONE FUNCTIONS NEED TO BE ASSSIGNED
                     bool = cmd[1][0].strip()
                     bool = bool.split("/")

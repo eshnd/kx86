@@ -62,16 +62,25 @@ pm_start:
 i:
 dd 1
 
-mov ebx, 10000
-imul ebx, 7812
-
-outer_loop1351:
-    mov ecx, 580
-inner_loop1351:
-    dec ecx
-    jnz inner_loop1351
-    dec ebx
-    jnz outer_loop1351
+mov ecx, 5000
+mov eax, ecx
+imul eax, 135
+mov ebx, 100
+cdq
+idiv ebx
+mov ecx, eax
+pusha
+mov al, 0x36
+out 0x43, al
+mov bx, 1193
+.delay_loop_inline6081:
+    mov ax, bx
+.wait_inline6081:
+    out 0x40, al
+    dec ax
+    jnz .wait_inline6081
+    loop .delay_loop_inline6081
+popa
     
 
     mov esi, [lfb_addr]  
@@ -111,7 +120,7 @@ pixel_loop:
 
 
 
-j1056:
+j5822:
 
 mov eax, [i]
 add eax, 1
@@ -119,7 +128,7 @@ mov dword [i], eax
 mov eax, [i]
 sub eax, 1
 mov dword [i], eax
-jmp j1056
+jmp j5822
 
 
 

@@ -208,11 +208,26 @@ DATA_SEL equ 0x10"""
     boot_bin = f".boot{id_num}.bin"
     kernel_bin = f".kernel{id_num}.bin"
 
-    run_nasm(boot_asm, boot_bin)
-    run_nasm(kernel_asm, kernel_bin)
-    make_image(name, boot_bin, kernel_bin)
+    try:
+        run_nasm(boot_asm, boot_bin)
+        run_nasm(kernel_asm, kernel_bin)
+        make_image(name, boot_bin, kernel_bin)
+    except Exception as e:
+        print(e)
 
-    os.remove(f".boot{id_num}.asm")
-    os.remove(f".boot{id_num}.bin")
-    os.remove(f".kernel{id_num}.asm")
-    os.remove(f".kernel{id_num}.bin")
+    try:
+        os.remove(f".boot{id_num}.asm")
+    except:
+        pass
+    try:
+        os.remove(f".boot{id_num}.bin")
+    except:
+        pass
+    try:
+        os.remove(f".kernel{id_num}.asm")
+    except:
+        pass
+    try:
+        os.remove(f".kernel{id_num}.bin")
+    except:
+        pass

@@ -5,6 +5,12 @@ pack: infLoop,
     op: [i] -- 1, [i] & 
 ;
 
-pause: 10000;
+pause: 5000;
 rect: 50, 50, 500, 500, #FF0000;
 inf: infLoop;
+
+/:
+- fix timer function
+- add random number function
+- make vs code theme
+:/
