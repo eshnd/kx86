@@ -1,13 +1,13 @@
 num: i, 1;
 
-pack: inf_loop,
+pack: infLoop,
     op: [i] ++ 1, [i] &
     op: [i] -- 1, [i] & 
 ;
 
 pause: 5000;
 rect: 50, 50, 500, 500, #FF0000;
-inf: inf_loop;
+inf: infLoop;
 
 /:
 - time counter and sleeper
