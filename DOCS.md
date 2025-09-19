@@ -16,8 +16,19 @@ pack: FUNCTION_NAME,
     ...
 ;
 ```
+# asmpack (assembly snippet)
+```
+asmpack: FUNCTION_NAME,
+    ASM_COMMAND1
+    ASM_COMMAND2
+    ASM_COMMAND3
+    ...
+;
+```
 # call pack
 `call: FUNCTION_NAME;`
+# call asmpack
+`asmcall: FUNCTION_NAME;`
 # infinite loop
 `inf: FUNCTION_NAME;`
 # edit num or array val
