@@ -1,7 +1,7 @@
 # kx86 docs
 kdx86 is an imperative, modular programming language to make x86 kernel development easy
 # requirements
-to run the kx86 compiler, you need to have python3 & nasm installed and added to path. to run the compiled image, you need to have qemu installed and added to pathboth work on windows, mac, and linux
+to run the kx86 compiler, you need to have python3 & nasm installed and added to path. to run the compiled image, you need to have qemu installed and added to path. both work on windows, mac, and linux
 # num
 to define: `num: VAR_NAME, VALUE;` (these can only be defined at the top of your code)     
 to access values: `[VAR_NAME]`      
