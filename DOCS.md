@@ -1,5 +1,5 @@
 # kx86 docs
-an imperative, modular programming language to make x86 kernel development easy
+kdx86 is an imperative, modular programming language to make x86 kernel development easy
 # num
 to define: `num: VAR_NAME, VALUE;` (these can only be defined at the top of your code)     
 to access values: `[VAR_NAME]`      
