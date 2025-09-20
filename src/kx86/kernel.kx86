@@ -5,8 +5,3 @@ str: jVar, "hello<endl>";
 random: 0, 70, [iVar];
 rect: 50, 50, 55, 55, #FF0000;
 hang;
-
-/:
-- make linguist
-- make vs code theme
-:/
