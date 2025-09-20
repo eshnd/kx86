@@ -7,7 +7,6 @@ rect: 50, 50, 55, 55, #FF0000;
 hang;
 
 /:
-- set readme to kx86
 - make linguist
 - make vs code theme
 :/
