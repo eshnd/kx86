@@ -2,6 +2,11 @@
 kdx86 is an imperative, modular programming language to make x86 kernel development easy
 # requirements
 to run the kx86 compiler, you need to have python3 & nasm installed and added to path. to run the compiled image, you need to have qemu installed and added to path. both work on windows, mac, and linux
+# syntax highlighting
+i have a vscode extension but that's it sadly :(     
+download it using: `wget -O kx86.vsix 'https://github.com/eshnd/kx86-vscode/releases/download/v0.0.1/kx86-syntax-0.0.1.vsix'`     
+then install with: `code --install-extension kx86.vsix`
+then you can delete the vsix file
 # num
 to define: `num: VAR_NAME, VALUE;`        
 to access values: `[VAR_NAME]`      
