@@ -92,7 +92,7 @@ mov dword [idxVar], eax
     sub eax, 50          
     mov ebx, eax
 
-row_loop5875:
+row_loop691:
     push ebx                  
     mov edi, esi
     mov eax, 50
@@ -103,35 +103,35 @@ row_loop5875:
     sub eax, 50        
     mov ecx, eax
 
-pixel_loop5875:
+pixel_loop691:
     mov byte [edi], 0x00 
     mov byte [edi+1], 0x00 
     mov byte [edi+2], 0xFF 
     add edi, 3
-    loop pixel_loop5875
+    loop pixel_loop691
 
     pop ebx
     add esi, edx        
     dec ebx
-    jnz row_loop5875
+    jnz row_loop691
 
 
 
-while8178:
+while8166:
 
 mov eax, [idxVar]
 cmp eax, 1
-je true8178
-jne false8178
+je true8166
+jne false8166
 
-true8178:
-
-
+true8166:
 
 
-jmp while8178
 
-false8178:
+
+jmp while8166
+
+false8166:
 
 
 hlt

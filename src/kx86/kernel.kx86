@@ -5,7 +5,5 @@ str: strVar, "hello<endl>"&
 
 random: 0, 70, [idxVar];
 rect: 50, 50, 55, 55, #FF0000;
-while: [idxVar] == 1, then=hellohi, 1;
+while: [idxVar] == 1, then=hellohi ~ 1;
 hang;
-
-/: add params to docs :/
