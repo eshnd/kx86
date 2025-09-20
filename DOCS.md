@@ -5,12 +5,12 @@ to run the kx86 compiler, you need to have python3 & nasm installed and added to
 # syntax highlighting
 i have a vscode extension but that's it sadly :(     
 download it using: `wget -O kx86.vsix 'https://github.com/eshnd/kx86-vscode/releases/download/v0.0.1/kx86-syntax-0.0.1.vsix'`     
-then install with: `code --install-extension kx86.vsix`
+then install with: `code --install-extension kx86.vsix`     
 then you can delete the vsix file
 # num
 to define: `num: VAR_NAME, VALUE;`        
 to access values: `[VAR_NAME]`      
-(i would recommend naming everything in camelCase as to not interfere with the compiler)
+(i would recommend naming everything in camelCase so as to not interfere with the compiler)
 # array
 to define: `array: ARR_NAME, {VALUE1, VALUE2, VALUE3, ...};` (also only at top of code)     
 to access values: `[ARR_NAME@1]` for index 1 which is VALUE2
