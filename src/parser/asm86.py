@@ -2,6 +2,8 @@ import os
 import subprocess
 import sys
 import random
+import time
+import platform
 
 bootloader = """
 org 0x7C00
@@ -129,7 +131,7 @@ pm_start:
 
 """
 
-def create_image(name, show="*"):
+def create_image(name="._kx86.img", show="bin"):
     global kernel
     kernel += """
 
@@ -180,8 +182,8 @@ DATA_SEL equ 0x10"""
 
     with open(f".kernel{id_num}.asm", "w") as f:
         f.write(kernel)
-    if show != "*":
-        with open(show, "w") as f:
+    if show == "asm":
+        with open(name, "w") as f:
             f.write(kernel)
 
     def run_nasm(src, out):
@@ -209,9 +211,10 @@ DATA_SEL equ 0x10"""
     kernel_bin = f".kernel{id_num}.bin"
 
     try:
-        run_nasm(boot_asm, boot_bin)
-        run_nasm(kernel_asm, kernel_bin)
-        make_image(name, boot_bin, kernel_bin)
+        if show == "bin" or show == "jit":
+            run_nasm(boot_asm, boot_bin)
+            run_nasm(kernel_asm, kernel_bin)
+            make_image(name, boot_bin, kernel_bin)
     except Exception as e:
         print(e)
 
@@ -231,3 +234,14 @@ DATA_SEL equ 0x10"""
         os.remove(f".kernel{id_num}.bin")
     except:
         pass
+    if show == "jit":
+        try:
+            match platform.system():
+                case "Windows":
+                    os.system(f"qemu-system-i386 -drive format=raw,file={name} -vga std -cpu max -m 1G")
+                case "Darwin":
+                    os.system(f"qemu-system-i386 -drive format=raw,file={name} -vga std -accel hvf -cpu max -m 1G")
+                case "Linux":
+                    os.system(f"qemu-system-i386 -drive format=raw,file={name} -vga std -accel kvm -cpu max -m 1G")
+        finally:
+            os.remove("._kx86.img")

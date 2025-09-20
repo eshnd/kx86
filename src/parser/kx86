@@ -634,8 +634,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--file", type=str, nargs="+", help="file or files to compile")
     parser.add_argument("-o", "--output", type=str, help="file to output to")
-    parser.add_argument("-s", "--show-asm", type=str, help="display resultant assembly")
-    
+    parser.add_argument("-c", "--compile-mode", type=str, help="default is bin, can switch to asm or JIT") 
+
     args = parser.parse_args()
     body = ""
     for i in range(len(args.file)):
@@ -643,7 +643,10 @@ if __name__ == "__main__":
             body += "\n" + f.read()
     finale = kx86_compile(body).replace("@", " + ").replace("{", "").replace("}", "")
     asm86.kernel += init_vars + finale
-    if args.show_asm:
-        asm86.create_image(args.output, args.show_asm.strip())
+    if args.compile_mode.strip().lower() != "jit":
+        if args.compile_mode:
+            asm86.create_image(args.output, args.compile_mode.strip().lower())
+        else:
+            asm86.create_image(args.output)
     else:
-        asm86.create_image(args.output)
+        asm86.create_image(show=args.compile_mode)

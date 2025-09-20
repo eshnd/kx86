@@ -9,6 +9,6 @@ rect: 50, 50, 55, 55, #FF0000;
 inf: infLoop;
 
 /:
-- add random number function
+- make the arg compiled
 - make vs code theme
 :/

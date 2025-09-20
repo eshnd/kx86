@@ -62,6 +62,26 @@ pm_start:
 i:
 dd 1
 
+mov ecx, 5000
+mov eax, ecx
+imul eax, 135
+mov ebx, 100
+cdq
+idiv ebx
+mov ecx, eax
+pusha
+mov al, 0x36
+out 0x43, al
+mov bx, 1193
+.delay_loop_inline5623:
+    mov ax, bx
+.wait_inline5623:
+    out 0x40, al
+    dec ax
+    jnz .wait_inline5623
+    loop .delay_loop_inline5623
+popa
+    
 rdtsc
 xor eax, edx
 
@@ -80,24 +100,24 @@ mov dword [i], eax
     mov esi, [lfb_addr]  
     mov edx, [lfb_pitch]  
 
-    mov eax, 500
+    mov eax, 50
     imul eax, edx         
     add esi, eax
     mov edi, esi
 
-    mov eax, 501
-    sub eax, 500          
+    mov eax, 55
+    sub eax, 50          
     mov ebx, eax
 
 row_loop:
     push ebx                  
     mov edi, esi
-    mov eax, 500
+    mov eax, 50
     imul eax, 3              
     add edi, eax         
 
-    mov eax, 501
-    sub eax, 500        
+    mov eax, 55
+    sub eax, 50        
     mov ecx, eax
 
 pixel_loop:
@@ -114,9 +134,9 @@ pixel_loop:
 
 
 
-j267:
+j3042:
 
-jmp j267
+jmp j3042
 
 
 
