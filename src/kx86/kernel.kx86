@@ -5,7 +5,7 @@ pack: infLoop,
 
 pause: 5000;
 random: 0, 70, [i];
-rect: 50, 50, 500, 500, #FF0000;
+rect: 50, 50, 55, 55, #FF0000;
 inf: infLoop;
 
 /:
