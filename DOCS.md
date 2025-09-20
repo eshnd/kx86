@@ -61,6 +61,8 @@ if statements can also be used to check if a key is down (the same applies to wh
 for example: `if: key=a, then=FUNCTION_NAME, else=FUNCTION2_NAME;`      
 oh yeah also if you want to compare a float and a constant, you have to put an exclamation mark after conditional       
 for example: `if: [FLOAT_VAR] <=! 1.0`
+# generate random number
+`random: MIN, MAX, OUTPUT_VARIABLE;`
 # make pixel rect
 `rect: X1, Y1, X2, Y2, #COLORHEX;`
 # pause
