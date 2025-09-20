@@ -9,6 +9,7 @@ rect: 50, 50, 55, 55, #FF0000;
 inf: infLoop;
 
 /:
-- make the arg compiled
+- make strings
 - make vs code theme
+- set readme to kx86
 :/
