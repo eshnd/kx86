@@ -10,6 +10,7 @@ inf: infLoop;
 
 /:
 - make strings
-- make vs code theme
 - set readme to kx86
+- make linguist
+- make vs code theme
 :/
