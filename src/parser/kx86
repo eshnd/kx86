@@ -142,7 +142,7 @@ def draw_pixel(x1, y1, x2, y2, color, rdm):
     sub eax, {y1}          
     mov ebx, eax
 
-row_loop:
+row_loop{rdm}:
     push ebx                  
     mov edi, esi
     mov eax, {x1}
@@ -153,17 +153,17 @@ row_loop:
     sub eax, {x1}        
     mov ecx, eax
 
-pixel_loop:
+pixel_loop{rdm}:
     mov byte [edi], 0x{color.strip()[5:7]} 
     mov byte [edi+1], 0x{color.strip()[3:5]} 
     mov byte [edi+2], 0x{color.strip()[1:3]} 
     add edi, 3
-    loop pixel_loop
+    loop pixel_loop{rdm}
 
     pop ebx
     add esi, edx        
     dec ebx
-    jnz row_loop
+    jnz row_loop{rdm}
 
 
 """
@@ -229,13 +229,13 @@ def kx86_compile(body, splitter = ";"):
                     label = random.randint(1,10000)
                 labels.append(label)
 
-                params = 1
+                params = 0
                 try:
                     func = packs[cmd[1][:cmd[1].index(",")].strip()]
-                    while f"${params}" in func:
+                    while f"${params + 1}" in func:
                         params += 1
-                    cmd[1] = arguments(cmd[1].strip(), ",", params)
-                    for g in range(1, params):
+                    cmd[1] = arguments(cmd[1].strip(), ",", params + 1)
+                    for g in range(1, params + 1):
                         func = func.replace(f"${g}", cmd[1][g])
 
                     final += f"\nj{label}:\n" + kx86_compile(func, "&") + f"\njmp j{label}\n"
@@ -391,13 +391,36 @@ Done{bool_num}:
     jmp true{bool_num}
 
 """
-
-
                 final += f"\ntrue{bool_num}:\n\n"
-                final += "\n" + kx86_compile(packs[cmd[1][1].strip()[5:]], "&") + "\n"
+                params = 0
+                cmd[1][1] = cmd[1][1].strip()[5:]
+                try:
+                    
+                    func = packs[cmd[1][1][:cmd[1][1].index(",")].strip()]
+                    while f"${params + 1}" in func:
+                        params += 1
+                    cmd[1][1] = arguments(cmd[1][1].strip(), ",", params + 1)
+                    for g in range(1, params + 1):
+                        func = func.replace(f"${g}", cmd[1][1][g])
+                        final += "\n" + kx86_compile(func, "&") + "\n"
+                except:
+                    final += "\n" + kx86_compile(packs[cmd[1][1].strip()], "&") + "\n"
                 final += "\n" + f"jmp escape{bool_num}" + "\n"
                 final += f"\nfalse{bool_num}:\n\n"
-                if cmd[1][2].strip()[5:] != "NONE": # DO THIS AGAIN THE TRUE GOES INTO THE FALSE OH NO
+                if "NONE" not in cmd[1][2].strip(): # DO THIS AGAIN THE TRUE GOES INTO THE FALSE OH NO
+
+                    params = 0
+                    try:
+                        func = packs[cmd[1][2][:cmd[1][2].index(",")].strip()]
+                        while f"${params + 1}" in func:
+                            params += 1
+                        cmd[1][2] = arguments(cmd[1][2].strip(), ",", params + 1)
+                        for g in range(1, params + 1):
+                            func = func.replace(f"${g}", cmd[1][2][g])
+                            final += "\n" + kx86_compile(func, "&") + "\n"
+                    except:
+                        final += "\n" + kx86_compile(packs[cmd[1][2].strip()[5:]], "&") + "\n"
+
                     final += "\n" + kx86_compile(packs[cmd[1][2].strip()[5:]], "&") + "\n"
                 final += "\n" + f"escape{bool_num}:" + "\n"
                     
@@ -530,7 +553,20 @@ Done{bool_num}:
 
 """
                 final += f"\ntrue{bool_num}:\n\n"
-                final += "\n" + kx86_compile(packs[cmd[1][1].strip()[5:]], "&") + "\n"
+                params = 0
+                try:
+                    cmd[1][1] = cmd[1][1].strip()[5:]
+                    func = packs[cmd[1][1][:cmd[1][1].index(",")].strip()]
+                    while f"${params + 1}" in func:
+                        params += 1
+                    cmd[1][1] = arguments(cmd[1][1].strip(), ",", params + 1)
+                    for g in range(1, params + 1):
+                        func = func.replace(f"${g}", cmd[1][1][g])
+                        final += "\n" + kx86_compile(func, "&") + "\n"
+                except:
+                    final += "\n" + kx86_compile(packs[cmd[1][1].strip()[5:]], "&") + "\n"
+
+
                 final += "\n" + f"jmp while{bool_num}" + "\n"
                 final += f"\nfalse{bool_num}:\n\n"
             case "op":

@@ -1,7 +1,11 @@
-num: iVar, 1;
-str: jVar, "hello<endl>";
+pack: hellohi,
+num: idxVar, $1&
+str: strVar, "hello<endl>"&
+;
 
-
-random: 0, 70, [iVar];
+random: 0, 70, [idxVar];
 rect: 50, 50, 55, 55, #FF0000;
+while: [idxVar] == 1, then=hellohi, 1;
 hang;
+
+/: implement parameters in loops and conditionals:/

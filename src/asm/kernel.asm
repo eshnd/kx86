@@ -59,10 +59,10 @@ pm_start:
 
 
 
-iVar:
+idxVar:
 dd 1
 
-jVar:
+strVar:
 db "hello", 0x0D, 0x0A, "", 0
 
 rdtsc
@@ -77,7 +77,7 @@ xor edx, edx
 div ecx 
 mov eax, edx 
 add eax, 70
-mov dword [iVar], eax
+mov dword [idxVar], eax
     
 
     mov esi, [lfb_addr]  
@@ -92,7 +92,7 @@ mov dword [iVar], eax
     sub eax, 50          
     mov ebx, eax
 
-row_loop:
+row_loop5875:
     push ebx                  
     mov edi, esi
     mov eax, 50
@@ -103,18 +103,35 @@ row_loop:
     sub eax, 50        
     mov ecx, eax
 
-pixel_loop:
+pixel_loop5875:
     mov byte [edi], 0x00 
     mov byte [edi+1], 0x00 
     mov byte [edi+2], 0xFF 
     add edi, 3
-    loop pixel_loop
+    loop pixel_loop5875
 
     pop ebx
     add esi, edx        
     dec ebx
-    jnz row_loop
+    jnz row_loop5875
 
+
+
+while8178:
+
+mov eax, [idxVar]
+cmp eax, 1
+je true8178
+jne false8178
+
+true8178:
+
+
+
+
+jmp while8178
+
+false8178:
 
 
 hlt
