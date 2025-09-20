@@ -3,12 +3,15 @@ kdx86 is an imperative, modular programming language to make x86 kernel developm
 # requirements
 to run the kx86 compiler, you need to have python3 & nasm installed and added to path. to run the compiled image, you need to have qemu installed and added to path. both work on windows, mac, and linux
 # num
-to define: `num: VAR_NAME, VALUE;` (these can only be initialized at the top of your code)     
+to define: `num: VAR_NAME, VALUE;`        
 to access values: `[VAR_NAME]`      
 (i would recommend naming everything in camelCase as to not interfere with the compiler)
 # array
 to define: `array: ARR_NAME, {VALUE1, VALUE2, VALUE3, ...};` (also only at top of code)     
 to access values: `[ARR_NAME@1]` for index 1 which is VALUE2
+# string
+to define: `str: STRING_NAME, "Hello, World!<endl>";`
+literally just here so that i can say i have strings, you can't do anything with them since this lang is graphical      
 # pack (function)
 ```
 pack: FUNCTION_NAME,
@@ -67,6 +70,9 @@ for example: `if: [FLOAT_VAR] <=! 1.0`
 `rect: X1, Y1, X2, Y2, #COLORHEX;` (X1Y1 inclusive, X2Y2 exclusive)
 # pause
 `pause: APPROX_MILLISECONDS;`
+# hang
+to finish code so that it doesnt start reading garbage memory     
+`halt;`
 # commenting
 `//: single-line comment;`     
 ```

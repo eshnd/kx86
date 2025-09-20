@@ -59,29 +59,12 @@ pm_start:
 
 
 
-i:
+iVar:
 dd 1
 
-mov ecx, 5000
-mov eax, ecx
-imul eax, 135
-mov ebx, 100
-cdq
-idiv ebx
-mov ecx, eax
-pusha
-mov al, 0x36
-out 0x43, al
-mov bx, 1193
-.delay_loop_inline5623:
-    mov ax, bx
-.wait_inline5623:
-    out 0x40, al
-    dec ax
-    jnz .wait_inline5623
-    loop .delay_loop_inline5623
-popa
-    
+jVar:
+db "hello", 0x0D, 0x0A, "", 0
+
 rdtsc
 xor eax, edx
 
@@ -94,7 +77,7 @@ xor edx, edx
 div ecx 
 mov eax, edx 
 add eax, 70
-mov dword [i], eax
+mov dword [iVar], eax
     
 
     mov esi, [lfb_addr]  
@@ -134,9 +117,7 @@ pixel_loop:
 
 
 
-j3042:
-
-jmp j3042
+hlt
 
 
 

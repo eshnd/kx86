@@ -248,9 +248,14 @@ def kx86_compile(body, splitter = ";"):
             case "num":
                 cmd[1] = arguments(cmd[1].strip(), ",", 1)
                 data["[" + cmd[1][0].strip() + "]"] = "num"
-                final += "\n" + cmd[1][0].strip() + f":\ndd {cmd[1][1].strip()}\n"
+                init_vars += "\n" + cmd[1][0].strip() + f":\ndd {cmd[1][1].strip()}\n"
+            
+            case "str":
+                cmd[1] = arguments(cmd[1].strip(), ",", 1)
+                data["[" + cmd[1][0].strip() + "]"] = "str"
+                init_vars += "\n" + cmd[1][0].strip() + f":\ndb {cmd[1][1].strip().replace("<endl>", '", 0x0D, 0x0A, "')}, 0\n"
 
-            case "edit":
+            case "edit": # edit 'edit' for strings iykykykkykyk
                 cmd[1] = arguments(cmd[1].strip(), ",", 1)
                 final += f"\nmov dword {cmd[1][0].strip()}, {cmd[1][1].strip()}\n"
                     
@@ -628,6 +633,9 @@ fistp dword {cmd[1][1].strip()}
             case "random":
                 cmd[1] = arguments(cmd[1].strip(), ",", 2)
                 final += asmrandom(cmd[1][0].strip(), cmd[1][1].strip(), cmd[1][2].strip())
+            case "hang":
+                final += "\nhlt\n"
+
     return final
 
 if __name__ == "__main__":
@@ -641,7 +649,7 @@ if __name__ == "__main__":
     for i in range(len(args.file)):
         with open(args.file[i], "r") as f:
             body += "\n" + f.read()
-    finale = kx86_compile(body).replace("@", " + ").replace("{", "").replace("}", "")
+    finale = kx86_compile(body.replace("hang;", "hang:;").replace("hang&", "hang:&").replace("hang &", "hang: &")).replace("@", " + ").replace("{", "").replace("}", "")
     asm86.kernel += init_vars + finale
     if args.compile_mode.strip().lower() != "jit":
         if args.compile_mode:

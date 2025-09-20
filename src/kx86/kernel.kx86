@@ -1,15 +1,12 @@
-num: i, 1;
+num: iVar, 1;
+str: jVar, "hello<endl>";
 
-pack: infLoop,
-;
 
-pause: 5000;
-random: 0, 70, [i];
+random: 0, 70, [iVar];
 rect: 50, 50, 55, 55, #FF0000;
-inf: infLoop;
+hang;
 
 /:
-- make strings
 - set readme to kx86
 - make linguist
 - make vs code theme
