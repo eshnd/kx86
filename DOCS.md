@@ -3,7 +3,7 @@ kdx86 is an imperative, modular programming language to make x86 kernel developm
 # requirements
 to run the kx86 compiler, you need to have python3 & nasm installed and added to path. to run the compiled image, you need to have qemu installed and added to path. both work on windows, mac, and linux
 # num
-to define: `num: VAR_NAME, VALUE;` (these can only be defined at the top of your code)     
+to define: `num: VAR_NAME, VALUE;` (these can only be initialized at the top of your code)     
 to access values: `[VAR_NAME]`      
 (i would recommend naming everything in camelCase as to not interfere with the compiler)
 # array
@@ -62,9 +62,9 @@ for example: `if: key=a, then=FUNCTION_NAME, else=FUNCTION2_NAME;`
 oh yeah also if you want to compare a float and a constant, you have to put an exclamation mark after conditional       
 for example: `if: [FLOAT_VAR] <=! 1.0`
 # generate random number
-`random: MIN, MAX, OUTPUT_VARIABLE;`
+`random: MIN, MAX, OUTPUT_VARIABLE;` (MIN inclusive, MAX exclusive)
 # make pixel rect
-`rect: X1, Y1, X2, Y2, #COLORHEX;`
+`rect: X1, Y1, X2, Y2, #COLORHEX;` (X1Y1 inclusive, X2Y2 exclusive)
 # pause
 `pause: APPROX_MILLISECONDS;`
 # commenting
@@ -75,7 +75,7 @@ multi-line comment
 :/
 ```
 # to compile
-`kx86 -f <KERNEL-FILE-PATH> -o <OS-IMAGE-FILEPATH>`
+`kx86 -f <KERNEL-FILE-PATH> -o <OS-IMAGE-FILEPATH> -c <COMPILE-TYPE>`
 # to run (linux)
 `qemu-system-i386 -drive format=raw,file=<OS-IMAGE-FILEPATH> -vga std -accel kvm -cpu max -m <MEM-AMOUNT>`
 # to run (windows)
