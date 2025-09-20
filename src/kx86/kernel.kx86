@@ -8,4 +8,4 @@ rect: 50, 50, 55, 55, #FF0000;
 while: [idxVar] == 1, then=hellohi, 1;
 hang;
 
-/: implement parameters in loops and conditionals:/
+/: add params to docs :/

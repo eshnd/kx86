@@ -20,9 +20,9 @@ literally just here so that i can say i have strings, you can't do anything with
 # pack (function)
 ```
 pack: FUNCTION_NAME,
-    COMMAND1: PARAMS1 &
-    COMMAND2: PARAMS2 &
-    COMMAND3: PARAMS3 &
+    COMMAND1: ARG1 &
+    COMMAND2: ARG2 &
+    COMMAND3: $1 &
     ...
 ;
 ```
@@ -36,11 +36,11 @@ asmpack: FUNCTION_NAME,
 ;
 ```
 # call pack
-`call: FUNCTION_NAME;`
+`call: FUNCTION_NAME ~ PARAM1;`
 # call asmpack
 `asmcall: FUNCTION_NAME;`
 # infinite loop
-`inf: FUNCTION_NAME;`
+`inf: FUNCTION_NAME ~ PARAM1;`
 # edit num or array val
 `edit: VAR_NAME, VALUE;`
 # operations
@@ -61,10 +61,10 @@ list of operations:
 - `>f`: integer to float conversion
 - `>i`: float to integer conversion
 # while loop
-`while: CONDITIONAL, then=FUNCTION_NAME;`
+`while: CONDITIONAL, then=FUNCTION_NAME ~ PARAM1;`
 # if/else statements
-for if: `if: CONDITIONAL, then=FUNCTION_NAME, else=NONE;`     
-for if/else: `if: CONDITIONAL, then=FUNCTION_NAME, else=FUNCTION2_NAME;`     
+for if: `if: CONDITIONAL, then=FUNCTION_NAME ~ PARAM1, else=NONE;`     
+for if/else: `if: CONDITIONAL, then=FUNCTION_NAME ~ PARAM1, else=FUNCTION2_NAME ~ PARAM1;`     
 if statements can also be used to check if a key is down (the same applies to while loops)      
 for example: `if: key=a, then=FUNCTION_NAME, else=FUNCTION2_NAME;`      
 oh yeah also if you want to compare a float and a constant, you have to put an exclamation mark after conditional       
